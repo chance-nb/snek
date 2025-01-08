@@ -1,6 +1,7 @@
 package com.me.infprojectjava;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -22,6 +23,8 @@ public class Main extends com.badlogic.gdx.Game {
     public FitViewport viewport;
     public BitmapFont font;
 
+    public Screen currentScreen;
+
     @Override
     public void create() {
         viewport = new FitViewport(worldWidth, worldHeight);
@@ -29,7 +32,7 @@ public class Main extends com.badlogic.gdx.Game {
         manager = new AssetManager();
         font = new BitmapFont();
         font.setUseIntegerPositions(false);
-        font.getData().setScale(worldHeight/Gdx.graphics.getHeight());
+        font.getData().setScale(worldHeight / Gdx.graphics.getHeight());
 
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(Gdx.files.internal("assets.txt").read()))) {
@@ -49,13 +52,14 @@ public class Main extends com.badlogic.gdx.Game {
 
         manager.finishLoading();
 
-        this.setScreen(new GameScreen(this));
+        currentScreen = new GameScreen(this);
+        this.setScreen(currentScreen);
     }
 
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
-        font.getData().setScale(worldHeight/Gdx.graphics.getHeight());
+        font.getData().setScale(worldHeight / Gdx.graphics.getHeight());
     }
 
     @Override
