@@ -1,4 +1,4 @@
-package com.me.infprojectjava;
+package org.chance_nb.snek;
 
 import java.io.BufferedReader;
 import java.io.IOException;

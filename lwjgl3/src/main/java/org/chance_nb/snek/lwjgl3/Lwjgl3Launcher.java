@@ -1,8 +1,8 @@
-package com.me.infprojectjava.lwjgl3;
+package org.chance_nb.snek.lwjgl3;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.me.infprojectjava.Main;
+import org.chance_nb.snek.Main;
 
 /**
  * Launches the desktop (LWJGL3) application.

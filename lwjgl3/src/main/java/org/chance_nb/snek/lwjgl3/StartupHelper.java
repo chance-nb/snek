@@ -14,7 +14,7 @@
  */
 //Note, the above license and copyright applies to this file only.
 
-package com.me.infprojectjava.lwjgl3;
+package org.chance_nb.snek.lwjgl3;
 
 import org.lwjgl.system.macosx.LibC;
 

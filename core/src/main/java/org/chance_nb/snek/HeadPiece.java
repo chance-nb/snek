@@ -1,6 +1,6 @@
-package com.me.infprojectjava;
+package org.chance_nb.snek;
 
-import static com.me.infprojectjava.GameScreen.speed;
+import static org.chance_nb.snek.GameScreen.speed;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;

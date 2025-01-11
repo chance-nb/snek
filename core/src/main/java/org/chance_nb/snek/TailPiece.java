@@ -1,6 +1,6 @@
-package com.me.infprojectjava;
+package org.chance_nb.snek;
 
-import static com.me.infprojectjava.GameScreen.minDistance;
+import static org.chance_nb.snek.GameScreen.minDistance;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;

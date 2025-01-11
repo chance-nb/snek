@@ -1,4 +1,4 @@
-package com.me.infprojectjava;
+package org.chance_nb.snek;
 
 import com.badlogic.gdx.math.Vector2;
 
