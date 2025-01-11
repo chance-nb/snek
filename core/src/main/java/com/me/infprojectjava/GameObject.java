@@ -7,42 +7,35 @@ import com.badlogic.gdx.math.Vector2;
 
 public class GameObject extends Sprite {
     Main main;
-    private Vector2 pos = new Vector2();
+    Vector2 pos = new Vector2();
 
-    public GameObject(Main main, Texture texture) {
+    public GameObject(Main main, Texture texture, float posx, float posy, float sizex, float sizey, float originx, float originy) {
         super(texture);
         this.main = main;
-    }
-
-    public GameObject(Main main, Texture texture, float posx, float posy) {
-        super(texture);
-        this.main = main;
+        this.setSize(sizex, sizey);
+        this.setOrigin(sizex * originx, sizey * originy);
         this.setPos(posx, posy);
     }
 
-    public GameObject(Main main) {
-        this.main = main;
-    }
-
-    public void update(GameScreen parent) {
-    }
-
-    public Vector2 getPos() {
-        return this.pos;
-    }
+    public void update(GameScreen parent, float delta) {}
 
     public void setPos(float x, float y) {
         this.pos.set(x, y);
-        super.setPosition(x, y);
     }
 
-    public void setPos(Vector2 pos) {
-        this.pos = pos;
-        super.setPosition(pos.x, pos.y);
+    @Override
+    public void draw(Batch batch) {
+        this.setOriginBasedPosition(pos.x, pos.y);
+        super.draw(batch);
+    }
+
+    public void draw(Batch batch, float x, float y) {
+        this.setOriginBasedPosition(x, y);
+        super.draw(batch);
     }
 
     public void wrapDraw(Batch batch) {
-        Vector2 drawPos = Util.wrapClampVec2World(pos, main);
-        batch.draw(this.getTexture(), drawPos.x+(1-this.getWidth()/2), drawPos.y+(1-this.getHeight()/2), this.getWidth(), this.getHeight());
+        Vector2 drawPos = Util.wrapClampVec2World(main, pos);
+        this.draw(batch, drawPos.x, drawPos.y);
     }
 }

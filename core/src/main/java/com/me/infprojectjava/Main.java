@@ -1,27 +1,29 @@
 package com.me.infprojectjava;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 
 public class Main extends com.badlogic.gdx.Game {
-    public final float worldWidth = 30;
-    public final float worldHeight = 20;
+    public final float worldWidth = 15;
+    public final float worldHeight = 10;
 
     public AssetManager manager;
     public SpriteBatch spriteBatch;
     public FitViewport viewport;
-    public BitmapFont font;
+
+    public FreeTypeFontGenerator jersey10Gen;
+    public FreeTypeFontGenerator.FreeTypeFontParameter jersey10Param;
 
     public Screen currentScreen;
 
@@ -30,9 +32,9 @@ public class Main extends com.badlogic.gdx.Game {
         viewport = new FitViewport(worldWidth, worldHeight);
         spriteBatch = new SpriteBatch();
         manager = new AssetManager();
-        font = new BitmapFont();
-        font.setUseIntegerPositions(false);
-        font.getData().setScale(worldHeight / Gdx.graphics.getHeight());
+
+        jersey10Gen = new FreeTypeFontGenerator(Gdx.files.internal("Jersey10-Regular.ttf"));
+        jersey10Param = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(Gdx.files.internal("assets.txt").read()))) {
@@ -42,6 +44,7 @@ public class Main extends com.badlogic.gdx.Game {
                     manager.load(line, Texture.class);
                 } else if (line.endsWith("sound.mp3")) {
                     manager.load(line, Sound.class);
+                } else if (line.endsWith(".ttf")) {
                 } else {
                     throw new Error("Unhandled Asset file found");
                 }
@@ -59,7 +62,6 @@ public class Main extends com.badlogic.gdx.Game {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
-        font.getData().setScale(worldHeight / Gdx.graphics.getHeight());
     }
 
     @Override
@@ -70,5 +72,6 @@ public class Main extends com.badlogic.gdx.Game {
     @Override
     public void dispose() {
         manager.clear();
+        jersey10Gen.dispose();
     }
 }

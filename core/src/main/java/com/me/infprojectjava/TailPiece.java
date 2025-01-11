@@ -1,35 +1,55 @@
 package com.me.infprojectjava;
 
+import static com.me.infprojectjava.GameScreen.minDistance;
+
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 
-import static com.me.infprojectjava.GameScreen.minDistance;
-
 public class TailPiece extends GameObject {
     TailPiece prevPiece;
+    boolean headCollision = true;
+
     public TailPiece(Main main, Vector2 pos, TailPiece prevPiece) {
-        super(main, main.manager.get("wormcircle.png"));
-        this.setSize(0.8f, 0.8f);
-        this.setPos(pos);
+        super(main, main.manager.get("wormcircle.png"), pos.x, pos.y, 0.6f, 0.6f, 0.5f, 0.5f);
+        this.pos = pos;
         this.prevPiece = prevPiece;
     }
 
+    public TailPiece(Main main, Vector2 pos, TailPiece prevPiece, boolean dontCollideWithHead) {
+        super(main, main.manager.get("wormcircle.png"), pos.x, pos.y, 0.6f, 0.6f, 0.5f, 0.5f);
+        this.pos = pos;
+        this.prevPiece = prevPiece;
+        if (dontCollideWithHead) {
+            this.headCollision = false;
+        }
+    }
+
     @Override
-    public void update(GameScreen parent) {
+    public void update(GameScreen parent, float delta) {
+        // move
         Vector2 target;
         if (prevPiece != null) {
-            target = prevPiece.getPos();
+            target = prevPiece.pos;
         } else {
-            target = parent.head.getPos();
+            target = parent.head.pos;
         }
+        float interpolationFactor = Math.clamp(this.pos.dst(target) * (this.pos.dst(target) - minDistance), 0f, 0.6f);
+        this.pos = this.pos.interpolate(target, interpolationFactor, Interpolation.pow2Out);
 
-        float interpolationFactor = Math.clamp(this.getPos().dst(target) * (this.getPos().dst(target) - minDistance), 0f, 0.6f);
+        // collide
+        if (headCollision) {
+            if (Util.checkCollision(main, this.pos, parent.head.pos, 0.35f)) {
+                System.out.println("u died");
+                main.setScreen(new GameoverScreen(main, parent.points, main.jersey10Gen, main.jersey10Param));
+            }
+        }
+    }
 
-        this.setPos(this.getPos().interpolate(target, interpolationFactor, Interpolation.linear));
-
+    public void updateRecursive(GameScreen parent, float delta) {
+        this.update(parent, delta);
         if (prevPiece != null) {
-            prevPiece.update(parent);
+            prevPiece.updateRecursive(parent, delta);
         }
     }
 

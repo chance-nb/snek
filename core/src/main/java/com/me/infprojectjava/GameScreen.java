@@ -1,7 +1,5 @@
 package com.me.infprojectjava;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -11,11 +9,11 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameScreen implements Screen {
-    static int numTailPieces = 5;
+    static int numTailPieces = 4;
     static float minDistance = 0.1f;
-    static float speed = 6f;
+    static float speed = 5f;
 
-    static float numApples = 10;
+    static float numApples = 30;
     final Main main;
     final Sound pop;
     int points;
@@ -36,7 +34,7 @@ public class GameScreen implements Screen {
 
         // initialize tail pieces
         for (int i = 0; i < numTailPieces; i++) {
-            lastPiece = new TailPiece(main, head.getPos().cpy(), lastPiece);
+            lastPiece = new TailPiece(main, head.pos.cpy(), lastPiece, true);
         }
 
         // initialize apples
@@ -51,37 +49,17 @@ public class GameScreen implements Screen {
     }
 
     public void render(float delta) {
-        input(delta);
-        logic(delta);
+        update(delta);
         draw();
     }
 
-    private void input(float delta) {
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            head.getPos().add(speed * delta, 0f);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            head.getPos().add(-speed * delta, 0f);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            head.getPos().add(0f, speed * delta);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            head.getPos().add(0f, -speed * delta);
-        }
-
-        if (Gdx.input.isTouched()) {
-            head.getPos().set(Gdx.input.getX(), Gdx.input.getY());
-            main.viewport.unproject(head.getPos());
-        }
-
-
-    }
-
-    private void logic(float delta) {
-        // snake tail stuff
-        lastPiece.update(this);
+    private void update(float delta) {
+        head.update(this, delta);
+        // update tail pieces (recursively)
+        lastPiece.updateRecursive(this, delta);
         // apples
         for (Apple apple : apples) {
-            apple.update(this);
+            apple.update(this, delta);
         }
     }
 
@@ -91,17 +69,19 @@ public class GameScreen implements Screen {
         main.spriteBatch.setProjectionMatrix(main.viewport.getCamera().combined);
         main.spriteBatch.begin();
 
-        lastPiece.wrapDraw(main.spriteBatch);
-        head.wrapDraw(main.spriteBatch);
-
         for (Apple apple : apples) {
             apple.draw(main.spriteBatch);
         }
 
-        main.font.draw(main.spriteBatch, "Points: " + points, 2, 2);
+        lastPiece.wrapDraw(main.spriteBatch);
+        head.wrapDraw(main.spriteBatch);
+
+//        main.font.draw(main.spriteBatch, "Points: " + points, 2, 2);
 
         main.spriteBatch.end();
     }
+
+    // TODO IDEA tail drags apples
 
 
     @Override
