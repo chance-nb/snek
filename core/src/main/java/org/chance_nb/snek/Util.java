@@ -26,4 +26,8 @@ public class Util {
     public static boolean checkCollision(Main main, Vector2 pos1, Vector2 pos2, float range) {
         return Math.abs(Util.wrapClampVec2World(main, pos1).sub(Util.wrapClampVec2World(main, pos2)).len()) < range;
     }
+
+    enum Direction {
+        L, UL, U, UR, R, DR, D, DL;
+    }
 }
