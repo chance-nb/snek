@@ -61,7 +61,7 @@ public class GameScreen implements Screen {
 
         // Load the shader
         ShaderProgram.pedantic = false;
-        shader = new ShaderProgram(Gdx.files.internal("shaders/background.vert"), Gdx.files.internal("shaders/background.frag"));
+        shader = new ShaderProgram(Gdx.files.internal("shaders/passthrough.vert"), Gdx.files.internal("shaders/background.frag"));
         if (!shader.isCompiled()) {
             throw new IllegalArgumentException("Error compiling shader: " + shader.getLog());
         }
@@ -125,8 +125,6 @@ public class GameScreen implements Screen {
     public void pause() {
 
     }
-
-    // TODO IDEA tail drags apples
 
     @Override
     public void resume() {

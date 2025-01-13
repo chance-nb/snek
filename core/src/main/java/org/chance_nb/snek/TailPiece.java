@@ -34,7 +34,8 @@ public class TailPiece extends GameObject {
         } else {
             target = parent.head.pos;
         }
-        float interpolationFactor = Math.clamp(this.pos.dst(target) * (this.pos.dst(target) - minDistance), 0f, 0.6f);
+        float distance = this.pos.dst(target);
+        float interpolationFactor = Math.clamp(distance * (distance - minDistance), 0f, 0.6f);
         this.pos = this.pos.interpolate(target, interpolationFactor, Interpolation.pow2Out);
 
         // collide
