@@ -2,6 +2,7 @@ package org.chance_nb.snek;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -32,7 +33,7 @@ public class GameoverScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        if (Gdx.input.isTouched()) {
+        if (Gdx.input.isTouched() || Gdx.input.isKeyPressed(Keys.SPACE)) {
             if (inputReleased) {
                 main.setScreen(new GameScreen(main));
             }

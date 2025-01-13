@@ -22,8 +22,8 @@ public class Main extends com.badlogic.gdx.Game {
     public SpriteBatch spriteBatch;
     public FitViewport viewport;
 
-    public FreeTypeFontGenerator jersey10Gen;
-    public FreeTypeFontGenerator.FreeTypeFontParameter jersey10Param;
+    public FreeTypeFontGenerator mainFontGen;
+    public FreeTypeFontGenerator.FreeTypeFontParameter mainFontParam;
 
     public Screen currentScreen;
 
@@ -33,8 +33,8 @@ public class Main extends com.badlogic.gdx.Game {
         spriteBatch = new SpriteBatch();
         manager = new AssetManager();
 
-        jersey10Gen = new FreeTypeFontGenerator(Gdx.files.internal("Jersey10-Regular.ttf"));
-        jersey10Param = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        mainFontGen = new FreeTypeFontGenerator(Gdx.files.internal("Jersey10-Regular.ttf"));
+        mainFontParam = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(Gdx.files.internal("assets.txt").read()))) {
@@ -44,9 +44,6 @@ public class Main extends com.badlogic.gdx.Game {
                     manager.load(line, Texture.class);
                 } else if (line.endsWith("sound.mp3")) {
                     manager.load(line, Sound.class);
-                } else if (line.endsWith(".ttf")) {
-                } else {
-                    throw new Error("Unhandled Asset file found");
                 }
             }
         } catch (IOException e) {
@@ -72,6 +69,6 @@ public class Main extends com.badlogic.gdx.Game {
     @Override
     public void dispose() {
         manager.clear();
-        jersey10Gen.dispose();
+        mainFontGen.dispose();
     }
 }
