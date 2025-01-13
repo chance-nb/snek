@@ -21,6 +21,7 @@ public class GameoverScreen implements Screen {
         this.main = main;
         this.points = points;
         fontParam.size = 30;
+        fontParam.color = Color.PURPLE;
         this.font = fontGen.generateFont(fontParam);
         this.font.setUseIntegerPositions(false);
         this.font.getData().setScale(main.worldHeight / Gdx.graphics.getHeight());

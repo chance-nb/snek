@@ -27,6 +27,8 @@ public class Main extends com.badlogic.gdx.Game {
 
     public Screen currentScreen;
 
+    public Texture white_pixel;
+
     @Override
     public void create() {
         viewport = new FitViewport(worldWidth, worldHeight);
@@ -51,6 +53,8 @@ public class Main extends com.badlogic.gdx.Game {
         }
 
         manager.finishLoading();
+
+        this.white_pixel = manager.get("white_pixel.png");
 
         currentScreen = new GameScreen(this);
         this.setScreen(currentScreen);

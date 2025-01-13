@@ -34,6 +34,7 @@ public class GameScreen implements Screen {
     public GameScreen(Main main) {
         this.main = main;
         main.mainFontParam.size = 30;
+        main.mainFontParam.color = Color.BLACK;
         this.font = main.mainFontGen.generateFont(main.mainFontParam);
         this.font.setUseIntegerPositions(false);
         // this.font.getData().setScale(main.worldHeight / Gdx.graphics.getHeight());
@@ -101,6 +102,7 @@ public class GameScreen implements Screen {
         main.spriteBatch.setShader(shader);
 
 
+        main.spriteBatch.draw(main.white_pixel, 0, 0, main.worldWidth, main.worldHeight);
         main.spriteBatch.setShader(null);
 
         for (Apple apple : apples) {
