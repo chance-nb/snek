@@ -2,15 +2,14 @@ package org.chance_nb.snek;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
-
 
 public class GameScreen implements Screen {
     static int numTailPieces = 4;
@@ -19,7 +18,6 @@ public class GameScreen implements Screen {
 
     static float numApples = 4;
     final Main main;
-    final Sound pop;
     int points;
     TailPiece lastPiece;
     HeadPiece head;
@@ -28,8 +26,7 @@ public class GameScreen implements Screen {
 
     BitmapFont font;
 
-    ShaderProgram shader;
-    float time;
+    float time = 5f;
 
     public GameScreen(Main main) {
         this.main = main;
@@ -42,9 +39,6 @@ public class GameScreen implements Screen {
         this.points = 0;
         Vector2 centre = new Vector2(main.worldWidth / 2, main.worldHeight / 2);
         this.head = new HeadPiece(main, centre.x, centre.y);
-
-        this.pop = main.manager.get("pop-sound.mp3");
-
         this.apples = new Array<>();
 
         // initialize tail pieces
@@ -60,11 +54,9 @@ public class GameScreen implements Screen {
         }
 
         // Load the shader
-        ShaderProgram.pedantic = false;
-        shader = new ShaderProgram(Gdx.files.internal("shaders/passthrough.vert"), Gdx.files.internal("shaders/background.frag"));
-        if (!shader.isCompiled()) {
-            throw new IllegalArgumentException("Error compiling shader: " + shader.getLog());
-        }
+
+
+        // backgroundShader = starShader;
     }
 
     @Override
@@ -93,26 +85,29 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(Color.BLACK);
         main.viewport.apply();
         main.spriteBatch.setProjectionMatrix(main.viewport.getCamera().combined);
+
         main.spriteBatch.begin();
-        shader.bind();
-        shader.setUniformf("u_time", time);
-        shader.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        Gdx.gl.glEnable(GL20.GL_BLEND);
 
-        // Apply the shader
-        main.spriteBatch.setShader(shader);
-
-
+        main.backgroundShader.bind();
+        main.backgroundShader.setUniformf("u_time", time);
+        main.backgroundShader.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        main.spriteBatch.setShader(main.backgroundShader);
         main.spriteBatch.draw(main.white_pixel, 0, 0, main.worldWidth, main.worldHeight);
         main.spriteBatch.setShader(null);
 
+        main.starShader.bind();
+        main.starShader.setUniformf("u_time", time);
+        main.starShader.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        main.starShader.setUniformf("u_density", 1.5f);
+        Util.drawWithTexShader(() -> head.wrapDraw(main.spriteBatch), main.starShader, main.spriteBatch);
+        Util.drawWithTexShader(() -> lastPiece.wrapDraw(main.spriteBatch), main.starShader, main.spriteBatch);
+
+        font.draw(main.spriteBatch, "Points: " + points, 2, 2);
         for (Apple apple : apples) {
             apple.draw(main.spriteBatch);
         }
-
-        lastPiece.wrapDraw(main.spriteBatch);
-        head.wrapDraw(main.spriteBatch);
-
-        font.draw(main.spriteBatch, "Points: " + points, 2, 2);
         main.spriteBatch.end();
     }
 

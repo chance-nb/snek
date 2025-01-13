@@ -16,7 +16,7 @@ public class Apple extends GameObject {
         if (Util.checkCollision(main, this.pos, parent.head.pos,0.65f)) {
             this.setPos(MathUtils.random(main.worldWidth), MathUtils.random(main.worldHeight));
             parent.lastPiece = new TailPiece(main , parent.lastPiece.pos.cpy(), parent.lastPiece);
-            parent.pop.play();
+            main.collect.play();
             parent.points += 1;
         }
 

@@ -41,6 +41,7 @@ public class TailPiece extends GameObject {
         // collide
         if (headCollision) {
             if (Util.checkCollision(main, this.pos, parent.head.pos, 0.35f)) {
+                main.death.play();
                 main.setScreen(new GameoverScreen(main, parent.points, main.mainFontGen, main.mainFontParam));
             }
         }

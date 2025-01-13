@@ -1,5 +1,9 @@
 package org.chance_nb.snek;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 
 public class Util {
@@ -16,7 +20,7 @@ public class Util {
     }
 
     public static Vector2 wrapClampVec2World(Main main, Vector2 vec2) {
-        return wrapClampVec2(vec2, 0f, main.worldWidth+0.6f, 0f, main.worldHeight+0.6f);
+        return wrapClampVec2(vec2, 0f, main.worldWidth + 0.6f, 0f, main.worldHeight + 0.6f);
     }
 
     public static float getAngle(Vector2 pos1, Vector2 pos2) {
@@ -29,5 +33,21 @@ public class Util {
 
     enum Direction {
         L, UL, U, UR, R, DR, D, DL;
+    }
+
+    @FunctionalInterface
+    interface Drawable {
+        void draw();
+    }
+
+    public static void drawWithTexShader(Drawable drawable, ShaderProgram shader, SpriteBatch batch) {
+        shader.setUniformi("u_texture", 1);
+        Gdx.gl.glActiveTexture(GL20.GL_TEXTURE1);
+        batch.setShader(shader);
+
+        drawable.draw();
+
+        Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
+        batch.setShader(null);
     }
 }
