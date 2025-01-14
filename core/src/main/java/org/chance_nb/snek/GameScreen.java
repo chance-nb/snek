@@ -52,11 +52,6 @@ public class GameScreen implements Screen {
         for (int i = 0; i < numApples; i++) {
             apples.add(new Apple(main, MathUtils.random(main.worldWidth), MathUtils.random(main.worldHeight)));
         }
-
-        // Load the shader
-
-
-        // backgroundShader = starShader;
     }
 
     @Override
@@ -104,10 +99,15 @@ public class GameScreen implements Screen {
         Util.drawWithTexShader(() -> head.wrapDraw(main.spriteBatch), main.starShader, main.spriteBatch);
         Util.drawWithTexShader(() -> lastPiece.wrapDraw(main.spriteBatch), main.starShader, main.spriteBatch);
 
-        font.draw(main.spriteBatch, "Points: " + points, 2, 2);
+        main.rainbowShader.bind();
+        main.rainbowShader.setUniformf("u_time", time);
+        main.rainbowShader.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         for (Apple apple : apples) {
-            apple.draw(main.spriteBatch);
+            Util.drawWithTexShader(() -> apple.draw(main.spriteBatch), main.rainbowShader, main.spriteBatch);
         }
+
+        font.draw(main.spriteBatch, "Points: " + points, 2, 2);
+
         main.spriteBatch.end();
     }
 

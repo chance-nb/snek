@@ -4,8 +4,6 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
-import static org.chance_nb.snek.GameScreen.minDistance;
-
 public class Apple extends GameObject {
     public Apple(Main main, float posx, float posy) {
         super(main, main.manager.get("apple.png"), posx, posy, 1f, 1f, 0.5f, 0.5f);
@@ -13,9 +11,9 @@ public class Apple extends GameObject {
 
     @Override
     public void update(GameScreen parent, float delta) {
-        if (Util.checkCollision(main, this.pos, parent.head.pos,0.65f)) {
+        if (Util.checkCollision(main, this.pos, parent.head.pos, 0.65f)) {
             this.setPos(MathUtils.random(main.worldWidth), MathUtils.random(main.worldHeight));
-            parent.lastPiece = new TailPiece(main , parent.lastPiece.pos.cpy(), parent.lastPiece);
+            parent.lastPiece = new TailPiece(main, parent.lastPiece.pos.cpy(), parent.lastPiece);
             main.collect.play();
             parent.points += 1;
         }
@@ -23,7 +21,7 @@ public class Apple extends GameObject {
         TailPiece closestTailPiece = findClosestCollidingTailPiece(parent.lastPiece, null, 100f);
         if (closestTailPiece != null) {
             Vector2 target = Util.wrapClampVec2World(main, closestTailPiece.pos);
-            this.pos = this.pos.interpolate(target, (-0.6f-this.pos.dst(target))/30, Interpolation.linear);
+            this.pos = this.pos.interpolate(target, (-0.6f - this.pos.dst(target)) / 30, Interpolation.linear);
         }
     }
 

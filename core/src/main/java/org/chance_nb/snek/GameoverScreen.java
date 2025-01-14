@@ -5,13 +5,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameoverScreen implements Screen {
     Main main;
     BitmapFont font;
     int points;
+    int runTime;
     float timecounter = 0;
     static float blinkinterval = 0.6f;
 
@@ -19,13 +19,13 @@ public class GameoverScreen implements Screen {
 
     boolean inputReleased = false;
 
-    public GameoverScreen(Main main, int points, FreeTypeFontGenerator fontGen,
-            FreeTypeFontGenerator.FreeTypeFontParameter fontParam) {
+    public GameoverScreen(Main main, int points, float runTime) {
         this.main = main;
         this.points = points;
-        fontParam.size = 55;
-        fontParam.color = Color.PURPLE;
-        this.font = fontGen.generateFont(fontParam);
+        this.runTime = Math.round(runTime);
+        main.mainFontParam.size = 55;
+        main.mainFontParam.color = Color.PURPLE;
+        this.font = main.mainFontGen.generateFont(main.mainFontParam);
         this.font.setUseIntegerPositions(false);
         this.font.getData().setScale(0.02f);
     }
@@ -37,7 +37,7 @@ public class GameoverScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        time += delta;
+        time += 2 * delta;
 
         if (Gdx.input.isTouched() || Gdx.input.isKeyPressed(Keys.SPACE)) {
             if (inputReleased) {
@@ -58,18 +58,24 @@ public class GameoverScreen implements Screen {
         main.starShader.setUniformf("u_density", 1.0f);
         Util.drawWithTexShader(
                 () -> font.draw(main.spriteBatch, "Game Over!", main.viewport.getWorldWidth() / 2 - 2.5f,
-                        main.viewport.getWorldHeight() / 2 + 1, 5f, 1, false),
+                        main.viewport.getWorldHeight() / 2 + 1.5f, 5f, 1, false),
                 main.starShader, main.spriteBatch);
 
         Util.drawWithTexShader(
                 () -> font.draw(main.spriteBatch, "Points: " + points, main.viewport.getWorldWidth() / 2 - 2.5f,
-                        main.viewport.getWorldHeight() / 2, 5f, 1, false),
+                        main.viewport.getWorldHeight() / 2 + 0.5f, 5f, 1, false),
+                main.starShader, main.spriteBatch);
+
+        Util.drawWithTexShader(
+                () -> font.draw(main.spriteBatch, "Time: " + runTime + " Seconds",
+                        main.viewport.getWorldWidth() / 2 - 2.5f,
+                        main.viewport.getWorldHeight() / 2 - 0.5f, 5f, 1, false),
                 main.starShader, main.spriteBatch);
 
         if (timecounter < blinkinterval) {
             Util.drawWithTexShader(
                     () -> font.draw(main.spriteBatch, "CLICK to restart", main.viewport.getWorldWidth() / 2 - 2.5f,
-                            main.viewport.getWorldHeight() / 2 - 1, 5f, 1, false),
+                            main.viewport.getWorldHeight() / 2 - 1.5f, 5f, 1, false),
                     main.starShader, main.spriteBatch);
         } else if (timecounter > blinkinterval * 2) {
             timecounter = 0;

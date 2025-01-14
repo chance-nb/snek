@@ -12,6 +12,6 @@ void main() {
     vec2 st = gl_FragCoord.xy / u_resolution;
     vec4 texColor = texture2D(u_texture, v_texCoords);
 
-    vec3 color = cross(vec3(cos(u_time+st.y), cos(u_time+st.x), cos(u_time+(st.x*st.y))), texColor.rgb);
+    vec3 color = cross(vec3(abs(cos(u_time)), abs(sin(u_time)), abs(sin(u_time))), texColor.rgb);
     gl_FragColor = vec4(color, texColor.a);
 }
