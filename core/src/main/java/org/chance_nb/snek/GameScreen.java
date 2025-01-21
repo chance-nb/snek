@@ -3,20 +3,22 @@ package org.chance_nb.snek;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameScreen implements Screen {
-    static int numTailPieces = 4;
+    FPSLogger fpslog = new FPSLogger();
+
+    static int numTailPieces = 40;
     static float minDistance = 0.1f;
     static float speed = 5f;
 
-    static float numApples = 4;
+    static float numApples = 9;
     final Main main;
     int points;
     TailPiece lastPiece;
@@ -27,6 +29,10 @@ public class GameScreen implements Screen {
     BitmapFont font;
 
     float time = 5f;
+
+
+    // modifiers
+    boolean movingApples = true;
 
     public GameScreen(Main main) {
         this.main = main;
@@ -63,6 +69,7 @@ public class GameScreen implements Screen {
         time += delta;
         update(delta);
         draw();
+        fpslog.log();
 
     }
 
@@ -103,7 +110,7 @@ public class GameScreen implements Screen {
         main.rainbowShader.setUniformf("u_time", time);
         main.rainbowShader.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         for (Apple apple : apples) {
-            Util.drawWithTexShader(() -> apple.draw(main.spriteBatch), main.rainbowShader, main.spriteBatch);
+            Util.drawWithTexShader(() -> apple.wrapDraw(main.spriteBatch), main.rainbowShader, main.spriteBatch);
         }
 
         font.draw(main.spriteBatch, "Points: " + points, 2, 2);

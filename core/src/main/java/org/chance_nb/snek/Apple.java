@@ -5,6 +5,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class Apple extends GameObject {
+    private float lastUpdate = 0f;
+    private Vector2 moveDir = new Vector2();
+
     public Apple(Main main, float posx, float posy) {
         super(main, main.manager.get("apple.png"), posx, posy, 1f, 1f, 0.5f, 0.5f);
     }
@@ -21,7 +24,16 @@ public class Apple extends GameObject {
         TailPiece closestTailPiece = findClosestCollidingTailPiece(parent.lastPiece, null, 100f);
         if (closestTailPiece != null) {
             Vector2 target = Util.wrapClampVec2World(main, closestTailPiece.pos);
-            this.pos = this.pos.interpolate(target, (-0.6f - this.pos.dst(target)) / 30, Interpolation.linear);
+            Vector2 wrappos = Util.wrapClampVec2World(main, this.pos);
+            this.pos = wrappos.interpolate(target, (-0.6f - wrappos.dst(target)) / 30, Interpolation.linear);
+        }
+
+        if (parent.movingApples) {
+            if (parent.time - lastUpdate > 0.7f) {
+                lastUpdate = parent.time;
+                moveDir.set((float) Math.random() * 4f - 2f, (float) Math.random() * 4f - 2f).nor();
+            }
+            this.pos.add(moveDir.cpy().scl(delta));
         }
     }
 
