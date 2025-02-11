@@ -88,7 +88,7 @@ public class Main extends com.badlogic.gdx.Game {
             throw new IllegalArgumentException("Error compiling shader: " + starShader.getLog());
         }
 
-        currentScreen = new GameScreen(this);
+        currentScreen = new StartScreen(this);
         this.setScreen(currentScreen);
     }
 

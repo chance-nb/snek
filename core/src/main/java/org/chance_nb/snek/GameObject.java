@@ -5,11 +5,12 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
-public class GameObject extends Sprite {
+public abstract class GameObject extends Sprite {
     Main main;
     Vector2 pos = new Vector2();
 
-    public GameObject(Main main, Texture texture, float posx, float posy, float sizex, float sizey, float originx, float originy) {
+    public GameObject(Main main, Texture texture, float posx, float posy, float sizex, float sizey, float originx,
+            float originy) {
         super(texture);
         this.main = main;
         this.setSize(sizex, sizey);
@@ -17,7 +18,7 @@ public class GameObject extends Sprite {
         this.setPos(posx, posy);
     }
 
-    public void update(GameScreen parent, float delta) {}
+    public abstract void update(GameScreen parent, float delta);
 
     public void setPos(float x, float y) {
         this.pos.set(x, y);

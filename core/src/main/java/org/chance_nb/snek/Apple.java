@@ -28,7 +28,7 @@ public class Apple extends GameObject {
             this.pos = wrappos.interpolate(target, (-0.6f - wrappos.dst(target)) / 30, Interpolation.linear);
         }
 
-        if (parent.movingApples) {
+        if (parent.state.movingAppleModifier) {
             if (parent.time - lastUpdate > 0.7f) {
                 lastUpdate = parent.time;
                 moveDir.set((float) Math.random() * 4f - 2f, (float) Math.random() * 4f - 2f).nor();

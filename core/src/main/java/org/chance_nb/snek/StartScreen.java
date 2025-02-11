@@ -7,31 +7,31 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class GameoverScreen implements Screen {
+public class StartScreen implements Screen {
     Main main;
     GlobalState state;
-    BitmapFont font;
-    int points;
-    int runTime;
-    float timecounter = 0;
+    BitmapFont instructFont;
+    BitmapFont titleFont;
     static float blinkinterval = 0.6f;
 
     float time = 0f;
-
-    boolean inputReleased = false;
+    float timecounter = 0;
 
     ToggleButton movingAppleButton;
 
-    public GameoverScreen(Main main, GlobalState state, int points, float runTime) {
+    public StartScreen(Main main) {
         this.main = main;
-        this.state = state;
-        this.points = points;
-        this.runTime = Math.round(runTime);
+        this.state = new GlobalState();
         main.mainFontParam.size = 55;
         main.mainFontParam.color = Color.PURPLE;
-        this.font = main.mainFontGen.generateFont(main.mainFontParam);
-        this.font.setUseIntegerPositions(false);
-        this.font.getData().setScale(0.02f);
+        this.instructFont = main.mainFontGen.generateFont(main.mainFontParam);
+        main.mainFontParam.size = 100;
+        this.titleFont = main.mainFontGen.generateFont(main.mainFontParam);
+        this.instructFont.setUseIntegerPositions(false);
+        this.instructFont.getData().setScale(0.02f);
+        this.titleFont.setUseIntegerPositions(false);
+        this.titleFont.getData().setScale(0.02f);
+
         this.movingAppleButton = new ToggleButton(main, 1f, 1f, 1f, 1f, main.manager.get("movingAppleButtonOn.png"),
                 main.manager.get("movingAppleButtonOff.png"), state.movingAppleModifier);
     }
@@ -44,13 +44,8 @@ public class GameoverScreen implements Screen {
     @Override
     public void render(float delta) {
         time += 2 * delta;
-
         if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-            if (inputReleased) {
-                main.setScreen(new GameScreen(main, state));
-            }
-        } else if (!inputReleased) {
-            inputReleased = true;
+            main.setScreen(new GameScreen(main, state));
         }
 
         ScreenUtils.clear(Color.BLACK);
@@ -63,36 +58,21 @@ public class GameoverScreen implements Screen {
         main.starShader.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         main.starShader.setUniformf("u_density", 1.0f);
         Util.drawWithTexShader(
-                () -> font.draw(main.spriteBatch, "Game Over!", main.viewport.getWorldWidth() / 2 - 2.5f,
+                () -> titleFont.draw(main.spriteBatch, "SNEK", main.viewport.getWorldWidth() / 2 - 2.5f,
                         main.viewport.getWorldHeight() / 2 + 1.5f, 5f, 1, false),
                 main.starShader, main.spriteBatch);
 
-        Util.drawWithTexShader(
-                () -> font.draw(main.spriteBatch, "Points: " + points, main.viewport.getWorldWidth() / 2 - 2.5f,
-                        main.viewport.getWorldHeight() / 2 + 0.5f, 5f, 1, false),
-                main.starShader, main.spriteBatch);
-
-        Util.drawWithTexShader(
-                () -> font.draw(main.spriteBatch, "Time: " + runTime + " Seconds",
-                        main.viewport.getWorldWidth() / 2 - 2.5f,
-                        main.viewport.getWorldHeight() / 2 - 0.5f, 5f, 1, false),
-                main.starShader, main.spriteBatch);
-
         if (timecounter < blinkinterval) {
-            Util.drawWithTexShader(
-                    () -> font.draw(main.spriteBatch, "Tap SPACE to restart", main.viewport.getWorldWidth() / 2 - 2.5f,
-                            main.viewport.getWorldHeight() / 2 - 1.5f, 5f, 1, false),
-                    main.starShader, main.spriteBatch);
+            instructFont.draw(main.spriteBatch, "Tap SPACE to start", main.viewport.getWorldWidth() / 2 - 2.5f,
+                    main.viewport.getWorldHeight() / 2 - 1.5f, 5f, 1, false);
         } else if (timecounter > blinkinterval * 2) {
             timecounter = 0;
         }
+        timecounter += delta;
 
         movingAppleButton.draw(main.spriteBatch);
         movingAppleButton.update();
         state.movingAppleModifier = movingAppleButton.value;
-
-        timecounter += delta;
-
         main.spriteBatch.end();
     }
 

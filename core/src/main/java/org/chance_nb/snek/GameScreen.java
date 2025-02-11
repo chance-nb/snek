@@ -3,7 +3,7 @@ package org.chance_nb.snek;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.FPSLogger;
+// import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.MathUtils;
@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameScreen implements Screen {
-    FPSLogger fpslog = new FPSLogger();
+    // FPSLogger fpslog = new FPSLogger();
 
     static int numTailPieces = 40;
     static float minDistance = 0.1f;
@@ -30,12 +30,12 @@ public class GameScreen implements Screen {
 
     float time = 5f;
 
+    GlobalState state;
 
-    // modifiers
-    boolean movingApples = true;
 
-    public GameScreen(Main main) {
+    public GameScreen(Main main, GlobalState state) {
         this.main = main;
+        this.state = state;
         main.mainFontParam.size = 30;
         main.mainFontParam.color = Color.BLACK;
         this.font = main.mainFontGen.generateFont(main.mainFontParam);
@@ -69,7 +69,7 @@ public class GameScreen implements Screen {
         time += delta;
         update(delta);
         draw();
-        fpslog.log();
+        // fpslog.log();
 
     }
 
