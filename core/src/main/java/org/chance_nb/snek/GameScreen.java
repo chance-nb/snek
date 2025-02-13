@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 public class GameScreen implements Screen {
     // FPSLogger fpslog = new FPSLogger();
 
-    static int numTailPieces = 40;
+    static int numTailPieces = 5;
     static float minDistance = 0.1f;
     static float speed = 5f;
 
@@ -30,12 +30,8 @@ public class GameScreen implements Screen {
 
     float time = 5f;
 
-    GlobalState state;
-
-
-    public GameScreen(Main main, GlobalState state) {
+    public GameScreen(Main main) {
         this.main = main;
-        this.state = state;
         main.mainFontParam.size = 30;
         main.mainFontParam.color = Color.BLACK;
         this.font = main.mainFontGen.generateFont(main.mainFontParam);

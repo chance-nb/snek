@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class StartScreen implements Screen {
     Main main;
-    GlobalState state;
     BitmapFont instructFont;
     BitmapFont titleFont;
     static float blinkinterval = 0.6f;
@@ -17,11 +16,11 @@ public class StartScreen implements Screen {
     float time = 0f;
     float timecounter = 0;
 
-    ToggleButton movingAppleButton;
+    TogglesUI toggleui;
 
     public StartScreen(Main main) {
         this.main = main;
-        this.state = new GlobalState();
+        this.toggleui = new TogglesUI(main);
         main.mainFontParam.size = 55;
         main.mainFontParam.color = Color.PURPLE;
         this.instructFont = main.mainFontGen.generateFont(main.mainFontParam);
@@ -31,9 +30,6 @@ public class StartScreen implements Screen {
         this.instructFont.getData().setScale(0.02f);
         this.titleFont.setUseIntegerPositions(false);
         this.titleFont.getData().setScale(0.02f);
-
-        this.movingAppleButton = new ToggleButton(main, 1f, 1f, 1f, 1f, main.manager.get("movingAppleButtonOn.png"),
-                main.manager.get("movingAppleButtonOff.png"), state.movingAppleModifier);
     }
 
     @Override
@@ -44,9 +40,11 @@ public class StartScreen implements Screen {
     @Override
     public void render(float delta) {
         time += 2 * delta;
+
         if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-            main.setScreen(new GameScreen(main, state));
+            main.setScreen(new GameScreen(main));
         }
+
 
         ScreenUtils.clear(Color.BLACK);
         main.viewport.apply();
@@ -63,16 +61,16 @@ public class StartScreen implements Screen {
                 main.starShader, main.spriteBatch);
 
         if (timecounter < blinkinterval) {
-            instructFont.draw(main.spriteBatch, "Tap SPACE to start", main.viewport.getWorldWidth() / 2 - 2.5f,
+            instructFont.draw(main.spriteBatch, "Press SPACE", main.viewport.getWorldWidth() / 2 - 2.5f,
                     main.viewport.getWorldHeight() / 2 - 1.5f, 5f, 1, false);
         } else if (timecounter > blinkinterval * 2) {
             timecounter = 0;
         }
+
+        toggleui.update();
+
         timecounter += delta;
 
-        movingAppleButton.draw(main.spriteBatch);
-        movingAppleButton.update();
-        state.movingAppleModifier = movingAppleButton.value;
         main.spriteBatch.end();
     }
 

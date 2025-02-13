@@ -7,9 +7,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class GameoverScreen implements Screen {
+public class GameOverScreen implements Screen {
     Main main;
-    GlobalState state;
     BitmapFont font;
     int points;
     int runTime;
@@ -20,11 +19,11 @@ public class GameoverScreen implements Screen {
 
     boolean inputReleased = false;
 
-    ToggleButton movingAppleButton;
+    TogglesUI toggleui;
 
-    public GameoverScreen(Main main, GlobalState state, int points, float runTime) {
+    public GameOverScreen(Main main, int points, float runTime) {
         this.main = main;
-        this.state = state;
+        this.toggleui = new TogglesUI(main);
         this.points = points;
         this.runTime = Math.round(runTime);
         main.mainFontParam.size = 55;
@@ -32,8 +31,6 @@ public class GameoverScreen implements Screen {
         this.font = main.mainFontGen.generateFont(main.mainFontParam);
         this.font.setUseIntegerPositions(false);
         this.font.getData().setScale(0.02f);
-        this.movingAppleButton = new ToggleButton(main, 1f, 1f, 1f, 1f, main.manager.get("movingAppleButtonOn.png"),
-                main.manager.get("movingAppleButtonOff.png"), state.movingAppleModifier);
     }
 
     @Override
@@ -47,7 +44,7 @@ public class GameoverScreen implements Screen {
 
         if (Gdx.input.isKeyPressed(Keys.SPACE)) {
             if (inputReleased) {
-                main.setScreen(new GameScreen(main, state));
+                main.setScreen(new GameScreen(main));
             }
         } else if (!inputReleased) {
             inputReleased = true;
@@ -80,16 +77,14 @@ public class GameoverScreen implements Screen {
 
         if (timecounter < blinkinterval) {
             Util.drawWithTexShader(
-                    () -> font.draw(main.spriteBatch, "Tap SPACE to restart", main.viewport.getWorldWidth() / 2 - 2.5f,
+                    () -> font.draw(main.spriteBatch, "Pres SPACE", main.viewport.getWorldWidth() / 2 - 2.5f,
                             main.viewport.getWorldHeight() / 2 - 1.5f, 5f, 1, false),
                     main.starShader, main.spriteBatch);
         } else if (timecounter > blinkinterval * 2) {
             timecounter = 0;
         }
 
-        movingAppleButton.draw(main.spriteBatch);
-        movingAppleButton.update();
-        state.movingAppleModifier = movingAppleButton.value;
+        toggleui.update();
 
         timecounter += delta;
 

@@ -21,6 +21,7 @@ public class Main extends com.badlogic.gdx.Game {
     public AssetManager manager;
     public SpriteBatch spriteBatch;
     public FitViewport viewport;
+    public GlobalState state;
 
     public FreeTypeFontGenerator mainFontGen;
     public FreeTypeFontGenerator.FreeTypeFontParameter mainFontParam;
@@ -41,6 +42,7 @@ public class Main extends com.badlogic.gdx.Game {
         viewport = new FitViewport(worldWidth, worldHeight);
         spriteBatch = new SpriteBatch();
         manager = new AssetManager();
+        state = new GlobalState();
 
         // mainFontGen = new FreeTypeFontGenerator(Gdx.files.internal("Jersey10-Regular.ttf"));
         mainFontGen = new FreeTypeFontGenerator(Gdx.files.internal("ZenDots-Regular.ttf"));
