@@ -18,7 +18,7 @@ public class HeadPiece extends GameObject {
 
     @Override
     public void update(GameScreen parent, float delta) {
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if ((Gdx.input.isKeyPressed(Input.Keys.RIGHT) && Gdx.input.isKeyPressed(Input.Keys.UP)) || Gdx.input.isKeyPressed(Input.Keys.COMMA)) {
             this.direction = Direction.UR;
             this.setRotation(-45);
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && Gdx.input.isKeyPressed(Input.Keys.DOWN)) {

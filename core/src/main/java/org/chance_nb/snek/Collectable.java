@@ -4,12 +4,12 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
-public class Apple extends GameObject {
+public class Collectable extends GameObject {
     private float lastUpdate = 0f;
     private Vector2 moveDir = new Vector2();
 
-    public Apple(Main main, float posx, float posy) {
-        super(main, main.manager.get("apple.png"), posx, posy, 1f, 1f, 0.5f, 0.5f);
+    public Collectable(Main main, float posx, float posy) {
+        super(main, main.manager.get("coin.png"), posx, posy, 1f, 1f, 0.5f, 0.5f);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class Apple extends GameObject {
             this.pos = wrappos.interpolate(target, (-0.6f - wrappos.dst(target)) / 30, Interpolation.linear);
         }
 
-        if (main.state.movingAppleModifier) {
+        if (main.state.movingCollectableModifier) {
             if (parent.time - lastUpdate > 0.7f) {
                 lastUpdate = parent.time;
                 moveDir.set((float) Math.random() * 4f - 2f, (float) Math.random() * 4f - 2f).nor();

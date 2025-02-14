@@ -18,13 +18,13 @@ public class GameScreen implements Screen {
     static float minDistance = 0.1f;
     static float speed = 5f;
 
-    static float numApples = 9;
+    static float numCollectables = 9;
     final Main main;
     int points;
     TailPiece lastPiece;
     HeadPiece head;
 
-    Array<Apple> apples;
+    Array<Collectable> collectables;
 
     BitmapFont font;
 
@@ -41,7 +41,7 @@ public class GameScreen implements Screen {
         this.points = 0;
         Vector2 centre = new Vector2(main.worldWidth / 2, main.worldHeight / 2);
         this.head = new HeadPiece(main, centre.x, centre.y);
-        this.apples = new Array<>();
+        this.collectables = new Array<>();
 
         // initialize tail pieces
         Vector2 subVec = new Vector2(0f, minDistance);
@@ -50,9 +50,9 @@ public class GameScreen implements Screen {
             lastPiece = new TailPiece(main, lastPiece.pos.cpy().sub(subVec), lastPiece, true);
         }
 
-        // initialize apples
-        for (int i = 0; i < numApples; i++) {
-            apples.add(new Apple(main, MathUtils.random(main.worldWidth), MathUtils.random(main.worldHeight)));
+        // initialize collectables
+        for (int i = 0; i < numCollectables; i++) {
+            collectables.add(new Collectable(main, MathUtils.random(main.worldWidth), MathUtils.random(main.worldHeight)));
         }
     }
 
@@ -73,9 +73,9 @@ public class GameScreen implements Screen {
         head.update(this, delta);
         // update tail pieces (recursively)
         lastPiece.updateRecursive(this, delta);
-        // apples
-        for (Apple apple : apples) {
-            apple.update(this, delta);
+        // collectables
+        for (Collectable collectable : collectables) {
+            collectable.update(this, delta);
         }
     }
 
@@ -105,8 +105,8 @@ public class GameScreen implements Screen {
         main.rainbowShader.bind();
         main.rainbowShader.setUniformf("u_time", time);
         main.rainbowShader.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        for (Apple apple : apples) {
-            Util.drawWithTexShader(() -> apple.wrapDraw(main.spriteBatch), main.rainbowShader, main.spriteBatch);
+        for (Collectable collectable : collectables) {
+            Util.drawWithTexShader(() -> collectable.wrapDraw(main.spriteBatch), main.rainbowShader, main.spriteBatch);
         }
 
         font.draw(main.spriteBatch, "Points: " + points, 2, 2);
