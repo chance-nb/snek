@@ -58,8 +58,11 @@ public class GameScreen implements Screen {
             apples.add(new Apple(main, MathUtils.random(main.worldWidth), MathUtils.random(main.worldHeight)));
         }
 
-        for (int i = 0; i < numMushrooms; i++) {
-            mushrooms.add(new Mushroom(main, MathUtils.random(main.worldWidth), MathUtils.random(main.worldHeight)));
+        if (main.state.mushrooms) {
+            for (int i = 0; i < numMushrooms; i++) {
+                mushrooms
+                        .add(new Mushroom(main, MathUtils.random(main.worldWidth), MathUtils.random(main.worldHeight)));
+            }
         }
     }
 
@@ -119,8 +122,11 @@ public class GameScreen implements Screen {
             Util.drawWithTexShader(() -> apple.wrapDraw(main.spriteBatch), main.rainbowShader, main.spriteBatch);
         }
 
+        main.rainbowShader.bind();
+        main.rainbowShader.setUniformf("u_time", time);
+        main.rainbowShader.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         for (Mushroom mushroom : mushrooms) {
-            mushroom.wrapDraw(main.spriteBatch);
+            Util.drawWithTexShader(() -> mushroom.wrapDraw(main.spriteBatch), main.rainbowShader, main.spriteBatch);
         }
 
         font.draw(main.spriteBatch, "Points: " + points, 2, 2);
