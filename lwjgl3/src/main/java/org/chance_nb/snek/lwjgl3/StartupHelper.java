@@ -100,7 +100,7 @@ public class StartupHelper {
 
         // Restart the JVM with -XstartOnFirstThread
         ArrayList<String> jvmArgs = new ArrayList<>();
-        String separator = System.getProperty("file.separator");
+        String separator = File.pathSeparator;
         // The following line is used assuming you target Java 8, the minimum for LWJGL3.
         String javaExecPath = System.getProperty("java.home") + separator + "bin" + separator + "java";
         // If targeting Java 9 or higher, you could use the following instead of the above line:

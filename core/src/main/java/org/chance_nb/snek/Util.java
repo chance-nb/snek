@@ -36,7 +36,7 @@ public class Util {
     }
 
     @FunctionalInterface
-    interface Drawable {
+    public interface Drawable {
         void draw();
     }
 

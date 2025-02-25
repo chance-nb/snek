@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 public class ToggleButton extends Button {
     Texture onTexture;
     Texture offTexture;
-    boolean value = false;
+    boolean value;
 
     public ToggleButton(Main main, float posx, float posy, float sizex, float sizey, Texture onTexture,
             Texture offTexture, boolean value) {
