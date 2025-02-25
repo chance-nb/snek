@@ -18,13 +18,15 @@ public class GameScreen implements Screen {
     static float minDistance = 0.1f;
     static float speed = 5f;
 
-    static float numApples = 9;
+    static int numApples = 9;
+    static int numMushrooms = 4;
     final Main main;
     int points;
     TailPiece lastPiece;
     HeadPiece head;
 
     Array<Apple> apples;
+    Array<Mushroom> mushrooms;
 
     BitmapFont font;
 
@@ -42,6 +44,7 @@ public class GameScreen implements Screen {
         Vector2 centre = new Vector2(main.worldWidth / 2, main.worldHeight / 2);
         this.head = new HeadPiece(main, centre.x, centre.y);
         this.apples = new Array<>();
+        this.mushrooms = new Array<>();
 
         // initialize tail pieces
         Vector2 subVec = new Vector2(0f, minDistance);
@@ -53,6 +56,10 @@ public class GameScreen implements Screen {
         // initialize apples
         for (int i = 0; i < numApples; i++) {
             apples.add(new Apple(main, MathUtils.random(main.worldWidth), MathUtils.random(main.worldHeight)));
+        }
+
+        for (int i = 0; i < numMushrooms; i++) {
+            mushrooms.add(new Mushroom(main, MathUtils.random(main.worldWidth), MathUtils.random(main.worldHeight)));
         }
     }
 
@@ -76,6 +83,9 @@ public class GameScreen implements Screen {
         // apples
         for (Apple apple : apples) {
             apple.update(this, delta);
+        }
+        for (Mushroom mushroom : mushrooms) {
+            mushroom.update(this, delta);
         }
     }
 
@@ -107,6 +117,10 @@ public class GameScreen implements Screen {
         main.rainbowShader.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         for (Apple apple : apples) {
             Util.drawWithTexShader(() -> apple.wrapDraw(main.spriteBatch), main.rainbowShader, main.spriteBatch);
+        }
+
+        for (Mushroom mushroom : mushrooms) {
+            mushroom.wrapDraw(main.spriteBatch);
         }
 
         font.draw(main.spriteBatch, "Points: " + points, 2, 2);
