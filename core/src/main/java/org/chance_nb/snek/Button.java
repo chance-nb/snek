@@ -19,7 +19,7 @@ public class Button extends GameObject {
                 main.viewport.unproject(clickPos);
                 clickPos.set(clickPos.x - pos.x, clickPos.y - pos.y);
                 // System.out.println(clickPos);
-                if ((Math.abs(clickPos.x) < size.x) && (Math.abs(clickPos.y) < size.y)) {
+                if ((Math.abs(clickPos.x) < size.x*0.5f) && (Math.abs(clickPos.y) < size.y*0.5f)) {
                     currentlyPressed = true;
                     return true;
                 }
