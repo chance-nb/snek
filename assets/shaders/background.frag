@@ -4,6 +4,7 @@ precision mediump float;
 
 uniform float u_time;
 uniform vec2 u_resolution;
+uniform vec3 u_colorshift;
 
 // 2D Random
 float random (in vec2 st) {
@@ -41,6 +42,6 @@ void main() {
 
     float nn = noise(st-u_time+random(st));
     float n = noise(vec2(st.x*(nn*10.0*abs(sin(u_time*nn))), st.y*(nn*10.0*abs(cos(u_time*nn)))));
-    vec3 color = vec3(smoothstep(0.0,0.6,abs(sin(n))), smoothstep(0.0,0.6,abs(cos(n*nn))), smoothstep(0.0,0.6,abs(sin(nn))));
+    vec3 color = vec3(smoothstep(0.0,0.6,abs(sin(n)))+u_colorshift.r, smoothstep(0.0,0.6,abs(cos(n*nn)))+u_colorshift.g, smoothstep(0.0,0.6,abs(sin(nn)))+u_colorshift.b);
     gl_FragColor = vec4(color, 1.0);
 }

@@ -1,6 +1,5 @@
 package org.chance_nb.snek;
 
-import static org.chance_nb.snek.GameScreen.speed;
 import static org.chance_nb.snek.Util.Direction;
 
 import com.badlogic.gdx.Gdx;
@@ -46,28 +45,28 @@ public class HeadPiece extends GameObject {
 
         switch (this.direction) {
             case Direction.UR:
-                this.pos.add(speed * delta * MathUtils.cosDeg(45), speed * delta * MathUtils.sinDeg(45));
+                this.pos.add(parent.speed * delta * MathUtils.cosDeg(45), parent.speed * delta * MathUtils.sinDeg(45));
                 break;
             case Direction.DR:
-                this.pos.add(speed * delta * MathUtils.cosDeg(45), speed * delta * MathUtils.sinDeg(-135));
+                this.pos.add(parent.speed * delta * MathUtils.cosDeg(45), parent.speed * delta * MathUtils.sinDeg(-135));
                 break;
             case Direction.UL:
-                this.pos.add(speed * delta * MathUtils.cosDeg(-135), speed * delta * MathUtils.sinDeg(45));
+                this.pos.add(parent.speed * delta * MathUtils.cosDeg(-135), parent.speed * delta * MathUtils.sinDeg(45));
                 break;
             case Direction.DL:
-                this.pos.add(speed * delta * MathUtils.cosDeg(-135), speed * delta * MathUtils.sinDeg(-135));
+                this.pos.add(parent.speed * delta * MathUtils.cosDeg(-135), parent.speed * delta * MathUtils.sinDeg(-135));
                 break;
             case Direction.R:
-                this.pos.add(speed * delta, 0f);
+                this.pos.add(parent.speed * delta, 0f);
                 break;
             case Direction.L:
-                this.pos.add(-speed * delta, 0f);
+                this.pos.add(-parent.speed * delta, 0f);
                 break;
             case Direction.U:
-                this.pos.add(0f, speed * delta);
+                this.pos.add(0f, parent.speed * delta);
                 break;
             case Direction.D:
-                this.pos.add(0f, -speed * delta);
+                this.pos.add(0f, -parent.speed * delta);
                 break;
             case null, default:
                 break;
@@ -76,7 +75,7 @@ public class HeadPiece extends GameObject {
         if (Gdx.input.isTouched()) {
             Vector2 target = new Vector2(Gdx.input.getX(), Gdx.input.getY());
             main.viewport.unproject(target);
-            this.pos = this.pos.interpolate(target, (speed/this.pos.dst(target))*delta, Interpolation.linear);
+            this.pos = this.pos.interpolate(target, (parent.speed/this.pos.dst(target))*delta, Interpolation.linear);
             this.setRotation(Util.getAngle(this.pos, target)-90);
         }
     }

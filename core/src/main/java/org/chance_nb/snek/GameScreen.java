@@ -8,18 +8,21 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameScreen implements Screen {
     // FPSLogger fpslog = new FPSLogger();
 
-    static int numTailPieces = 5;
-    static float minDistance = 0.1f;
-    static float speed = 5f;
+    int numTailPieces;
+    float speed;
+    int numApples;
+    int numMushrooms;
+    Vector3 colorshift;
 
-    static int numApples = 9;
-    static int numMushrooms = 4;
+    static float minDistance = 0.1f;
+
     final Main main;
     int points;
     TailPiece lastPiece;
@@ -46,19 +49,46 @@ public class GameScreen implements Screen {
         this.apples = new Array<>();
         this.mushrooms = new Array<>();
 
+        // Level: normal
+        if (!main.state.hardMode) {
+            numTailPieces = 3;
+            speed = 4f;
+            numApples = 9;
+            numMushrooms = 3;
+            main.state.diagonals = true;
+            colorshift = new Vector3(0f, 0f, 0f);
+        }
+        // Level: hard
+        else {
+            numTailPieces = 10;
+            speed = 6f;
+            numApples = 5;
+            numMushrooms = 6;
+            main.state.diagonals = false;
+            colorshift = new Vector3(0.3f, -0.4f, -0.2f);
+        }
+
         // initialize tail pieces
-        Vector2 subVec = new Vector2(0f, minDistance);
-        lastPiece = new TailPiece(main, head.pos.cpy().sub(subVec), null, true);
-        for (int i = 0; i < numTailPieces - 1; i++) {
+        Vector2 subVec = new Vector2(0f, minDistance); // vector to init distance TailPieces by
+        lastPiece = new TailPiece(main, head.pos.cpy().sub(subVec), null, true); // make the first one because it has
+                                                                                 // special case of null
+        // first make three pieces the head can't collide with for safety (loop runs
+        // twice because we already have one)
+        // always take last pieces pos, copy it and subtract init distance
+        for (int i = 0; i < 2; i++) {
             lastPiece = new TailPiece(main, lastPiece.pos.cpy().sub(subVec), lastPiece, true);
+        }
+        for (int i = 0; i < numTailPieces - 4; i++) { // then do the rest
+            lastPiece = new TailPiece(main, lastPiece.pos.cpy().sub(subVec), lastPiece, false);
         }
 
         // initialize apples
         for (int i = 0; i < numApples; i++) {
+            // apples get put at random positions
             apples.add(new Apple(main, MathUtils.random(main.worldWidth), MathUtils.random(main.worldHeight)));
         }
 
-        if (main.state.mushrooms) {
+        if (main.state.mushrooms) { // if we have mushrooms enabled, init those
             for (int i = 0; i < numMushrooms; i++) {
                 mushrooms
                         .add(new Mushroom(main, MathUtils.random(main.worldWidth), MathUtils.random(main.worldHeight)));
@@ -68,15 +98,12 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-
     }
 
     public void render(float delta) {
         time += delta;
         update(delta);
         draw();
-        // fpslog.log();
-
     }
 
     private void update(float delta) {
@@ -104,6 +131,7 @@ public class GameScreen implements Screen {
         main.backgroundShader.bind();
         main.backgroundShader.setUniformf("u_time", time);
         main.backgroundShader.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        main.backgroundShader.setUniformf("u_colorshift", colorshift);
         main.spriteBatch.setShader(main.backgroundShader);
         main.spriteBatch.draw(main.white_pixel, 0, 0, main.worldWidth, main.worldHeight);
         main.spriteBatch.setShader(null);
