@@ -45,7 +45,6 @@ public class StartScreen implements Screen {
             main.setScreen(new GameScreen(main));
         }
 
-
         ScreenUtils.clear(Color.BLACK);
         main.viewport.apply();
         main.spriteBatch.setProjectionMatrix(main.viewport.getCamera().combined);
@@ -61,8 +60,11 @@ public class StartScreen implements Screen {
                 main.starShader, main.spriteBatch);
 
         if (timecounter < blinkinterval) {
-            instructFont.draw(main.spriteBatch, "Press SPACE", main.viewport.getWorldWidth() / 2 - 2.5f,
-                    main.viewport.getWorldHeight() / 2 - 1.5f, 5f, 1, false);
+            Util.drawWithTexShader(
+                    () -> instructFont.draw(main.spriteBatch, "Press SPACE", main.viewport.getWorldWidth() / 2 - 2.5f,
+                            main.viewport.getWorldHeight() / 2 - 1.5f, 5f, 1, false),
+                    main.starShader, main.spriteBatch);
+
         } else if (timecounter > blinkinterval * 2) {
             timecounter = 0;
         }
