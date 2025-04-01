@@ -57,8 +57,8 @@ configure(subprojects) {
 }
 
 subprojects {
-  version = '$projectVersion'
-  ext.appName = 'inf project'
+  version = '1.0'
+  ext.appName = 'snek'
   repositories {
     mavenCentral()
     maven { url 'https://s01.oss.sonatype.org' }
