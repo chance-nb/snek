@@ -7,7 +7,8 @@ import com.badlogic.gdx.math.Vector2;
 public class Consumable extends GameObject {
     private float collisionRadius;
 
-    public Consumable(Main main, Texture texture, float posx, float posy, float sizex, float sizey, float collisionRadius, float originx, float originy) {
+    public Consumable(Main main, Texture texture, float posx, float posy, float sizex, float sizey,
+            float collisionRadius, float originx, float originy) {
         super(main, texture, posx, posy, sizex, sizey, originx, originy);
         this.collisionRadius = collisionRadius;
     }
@@ -28,9 +29,11 @@ public class Consumable extends GameObject {
         moreUpdates(parent, delta);
     }
 
-    protected void moreUpdates(GameScreen parent, float delta) {}
+    protected void moreUpdates(GameScreen parent, float delta) {
+    }
 
-    protected void onCollision(GameScreen parent, float delta) {} // to Override
+    protected void onCollision(GameScreen parent, float delta) {
+    } // to Override
 
     private TailPiece findClosestCollidingTailPiece(TailPiece currTailPiece, TailPiece closest, Float closestDist) {
         if (Util.checkCollision(main, currTailPiece.pos, this.pos, 0.6f)) {

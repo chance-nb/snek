@@ -44,7 +44,6 @@ public class Main extends com.badlogic.gdx.Game {
         manager = new AssetManager();
         state = new GlobalState();
 
-        // mainFontGen = new FreeTypeFontGenerator(Gdx.files.internal("Jersey10-Regular.ttf"));
         mainFontGen = new FreeTypeFontGenerator(Gdx.files.internal("ZenDots-Regular.ttf"));
         mainFontParam = new FreeTypeFontGenerator.FreeTypeFontParameter();
 

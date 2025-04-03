@@ -73,10 +73,10 @@ public class MenuScreen implements Screen {
         main.starShader.setUniformf("u_density", 1.0f);
 
         if (gameStart) {
-        Util.drawWithTexShader(
-                () -> titleFont.draw(main.spriteBatch, "SNEK", main.viewport.getWorldWidth() / 2 - 2.5f,
-                        main.viewport.getWorldHeight() / 2 + 1.5f, 5f, 1, false),
-                main.starShader, main.spriteBatch);
+            Util.drawWithTexShader(
+                    () -> titleFont.draw(main.spriteBatch, "SNEK", main.viewport.getWorldWidth() / 2 - 2.5f,
+                            main.viewport.getWorldHeight() / 2 + 1.5f, 5f, 1, false),
+                    main.starShader, main.spriteBatch);
         } else {
             Util.drawWithTexShader(
                     () -> instructFont.draw(main.spriteBatch, "Game Over!", main.viewport.getWorldWidth() / 2 - 2.5f,
@@ -84,7 +84,8 @@ public class MenuScreen implements Screen {
                     main.starShader, main.spriteBatch);
 
             Util.drawWithTexShader(
-                    () -> instructFont.draw(main.spriteBatch, "Points: " + points, main.viewport.getWorldWidth() / 2 - 2.5f,
+                    () -> instructFont.draw(main.spriteBatch, "Points: " + points,
+                            main.viewport.getWorldWidth() / 2 - 2.5f,
                             main.viewport.getWorldHeight() / 2 + 0.5f, 5f, 1, false),
                     main.starShader, main.spriteBatch);
 

@@ -20,13 +20,16 @@ public class HeadPiece extends GameObject {
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && Gdx.input.isKeyPressed(Input.Keys.UP) && main.state.diagonals) {
             this.direction = Direction.UR;
             this.setRotation(-45);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && Gdx.input.isKeyPressed(Input.Keys.DOWN) && main.state.diagonals) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && Gdx.input.isKeyPressed(Input.Keys.DOWN)
+                && main.state.diagonals) {
             this.direction = Direction.DR;
             this.setRotation(-135);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && Gdx.input.isKeyPressed(Input.Keys.UP) && main.state.diagonals) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && Gdx.input.isKeyPressed(Input.Keys.UP)
+                && main.state.diagonals) {
             this.direction = Direction.UL;
             this.setRotation(45);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && Gdx.input.isKeyPressed(Input.Keys.DOWN) && main.state.diagonals) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && Gdx.input.isKeyPressed(Input.Keys.DOWN)
+                && main.state.diagonals) {
             this.direction = Direction.DL;
             this.setRotation(135);
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
@@ -48,13 +51,16 @@ public class HeadPiece extends GameObject {
                 this.pos.add(parent.speed * delta * MathUtils.cosDeg(45), parent.speed * delta * MathUtils.sinDeg(45));
                 break;
             case Direction.DR:
-                this.pos.add(parent.speed * delta * MathUtils.cosDeg(45), parent.speed * delta * MathUtils.sinDeg(-135));
+                this.pos.add(parent.speed * delta * MathUtils.cosDeg(45),
+                        parent.speed * delta * MathUtils.sinDeg(-135));
                 break;
             case Direction.UL:
-                this.pos.add(parent.speed * delta * MathUtils.cosDeg(-135), parent.speed * delta * MathUtils.sinDeg(45));
+                this.pos.add(parent.speed * delta * MathUtils.cosDeg(-135),
+                        parent.speed * delta * MathUtils.sinDeg(45));
                 break;
             case Direction.DL:
-                this.pos.add(parent.speed * delta * MathUtils.cosDeg(-135), parent.speed * delta * MathUtils.sinDeg(-135));
+                this.pos.add(parent.speed * delta * MathUtils.cosDeg(-135),
+                        parent.speed * delta * MathUtils.sinDeg(-135));
                 break;
             case Direction.R:
                 this.pos.add(parent.speed * delta, 0f);
@@ -75,8 +81,9 @@ public class HeadPiece extends GameObject {
         if (Gdx.input.isTouched()) {
             Vector2 target = new Vector2(Gdx.input.getX(), Gdx.input.getY());
             main.viewport.unproject(target);
-            this.pos = this.pos.interpolate(target, (parent.speed/this.pos.dst(target))*delta, Interpolation.linear);
-            this.setRotation(Util.getAngle(this.pos, target)-90);
+            this.pos = this.pos.interpolate(target, (parent.speed / this.pos.dst(target)) * delta,
+                    Interpolation.linear);
+            this.setRotation(Util.getAngle(this.pos, target) - 90);
         }
     }
 }
