@@ -41,7 +41,6 @@ public class GameScreen implements Screen {
         main.mainFontParam.color = Color.BLACK;
         this.font = main.mainFontGen.generateFont(main.mainFontParam);
         this.font.setUseIntegerPositions(false);
-        // this.font.getData().setScale(main.worldHeight / Gdx.graphics.getHeight());
         this.font.getData().setScale(0.02f);
         this.points = 0;
         Vector2 centre = new Vector2(main.worldWidth / 2, main.worldHeight / 2);

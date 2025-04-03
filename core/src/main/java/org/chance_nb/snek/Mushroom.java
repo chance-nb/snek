@@ -13,7 +13,7 @@ public class Mushroom extends Consumable {
     @Override
     protected void onCollision(GameScreen parent, float delta) {
         main.death.play();
-        main.setScreen(new GameOverScreen(main, parent.points, parent.time - 5f));
+        main.setScreen(new MenuScreen(main, parent.points, parent.time - 5f));
     }
 
     @Override

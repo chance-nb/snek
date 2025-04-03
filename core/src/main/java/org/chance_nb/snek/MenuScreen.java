@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class StartScreen implements Screen {
+public class MenuScreen implements Screen {
     Main main;
     BitmapFont instructFont;
     BitmapFont titleFont;
@@ -16,9 +16,15 @@ public class StartScreen implements Screen {
     float time = 0f;
     float timecounter = 0;
 
+    boolean gameStart = true;
+    int points;
+    int runTime;
+
+    boolean inputReleased = false;
+
     TogglesUI toggleui;
 
-    public StartScreen(Main main) {
+    public MenuScreen(Main main) {
         this.main = main;
         this.toggleui = new TogglesUI(main);
         main.mainFontParam.size = 55;
@@ -32,6 +38,13 @@ public class StartScreen implements Screen {
         this.titleFont.getData().setScale(0.02f);
     }
 
+    public MenuScreen(Main main, int points, float runTime) {
+        this(main);
+        this.gameStart = false;
+        this.points = points;
+        this.runTime = Math.round(runTime);
+    }
+
     @Override
     public void show() {
 
@@ -42,7 +55,11 @@ public class StartScreen implements Screen {
         time += 2 * delta;
 
         if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-            main.setScreen(new GameScreen(main));
+            if (inputReleased) {
+                main.setScreen(new GameScreen(main));
+            }
+        } else if (!inputReleased) {
+            inputReleased = true;
         }
 
         ScreenUtils.clear(Color.BLACK);
@@ -54,17 +71,35 @@ public class StartScreen implements Screen {
         main.starShader.setUniformf("u_time", time);
         main.starShader.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         main.starShader.setUniformf("u_density", 1.0f);
+
+        if (gameStart) {
         Util.drawWithTexShader(
                 () -> titleFont.draw(main.spriteBatch, "SNEK", main.viewport.getWorldWidth() / 2 - 2.5f,
                         main.viewport.getWorldHeight() / 2 + 1.5f, 5f, 1, false),
                 main.starShader, main.spriteBatch);
+        } else {
+            Util.drawWithTexShader(
+                    () -> instructFont.draw(main.spriteBatch, "Game Over!", main.viewport.getWorldWidth() / 2 - 2.5f,
+                            main.viewport.getWorldHeight() / 2 + 1.5f, 5f, 1, false),
+                    main.starShader, main.spriteBatch);
+
+            Util.drawWithTexShader(
+                    () -> instructFont.draw(main.spriteBatch, "Points: " + points, main.viewport.getWorldWidth() / 2 - 2.5f,
+                            main.viewport.getWorldHeight() / 2 + 0.5f, 5f, 1, false),
+                    main.starShader, main.spriteBatch);
+
+            Util.drawWithTexShader(
+                    () -> instructFont.draw(main.spriteBatch, "Time: " + runTime + " Seconds",
+                            main.viewport.getWorldWidth() / 2 - 2.5f,
+                            main.viewport.getWorldHeight() / 2 - 0.5f, 5f, 1, false),
+                    main.starShader, main.spriteBatch);
+        }
 
         if (timecounter < blinkinterval) {
             Util.drawWithTexShader(
                     () -> instructFont.draw(main.spriteBatch, "Press SPACE", main.viewport.getWorldWidth() / 2 - 2.5f,
                             main.viewport.getWorldHeight() / 2 - 1.5f, 5f, 1, false),
                     main.starShader, main.spriteBatch);
-
         } else if (timecounter > blinkinterval * 2) {
             timecounter = 0;
         }
