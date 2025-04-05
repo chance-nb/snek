@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 
-public class Consumable extends GameObject {
+public abstract class Consumable extends GameObject {
     private float collisionRadius;
 
     public Consumable(Main main, Texture texture, float posx, float posy, float sizex, float sizey,
@@ -25,18 +25,12 @@ public class Consumable extends GameObject {
             Vector2 wrappos = Util.wrapClampVec2World(main, this.pos);
             this.pos = wrappos.interpolate(target, (-0.6f - wrappos.dst(target)) / 30, Interpolation.linear);
         }
-
-        moreUpdates(parent, delta);
     }
 
-    protected void moreUpdates(GameScreen parent, float delta) {
-    }
-
-    protected void onCollision(GameScreen parent, float delta) {
-    } // to Override
+    protected abstract void onCollision(GameScreen parent, float delta);
 
     private TailPiece findClosestCollidingTailPiece(TailPiece currTailPiece, TailPiece closest, Float closestDist) {
-        if (Util.checkCollision(main, currTailPiece.pos, this.pos, 0.6f)) {
+        if (Util.checkCollision(main, currTailPiece.pos, this.pos, collisionRadius)) {
             if (this.pos.dst(currTailPiece.pos) < closestDist) {
                 closest = currTailPiece;
                 closestDist = this.pos.dst(currTailPiece.pos);

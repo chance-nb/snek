@@ -20,9 +20,7 @@ public class TailPiece extends GameObject {
         super(main, main.manager.get("wormcircle.png"), pos.x, pos.y, 0.6f, 0.6f, 0.5f, 0.5f);
         this.pos = pos;
         this.prevPiece = prevPiece;
-        if (dontCollideWithHead) {
-            this.headCollision = false;
-        }
+        headCollision = !dontCollideWithHead;
     }
 
     @Override

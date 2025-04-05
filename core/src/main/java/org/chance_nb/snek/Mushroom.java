@@ -17,7 +17,7 @@ public class Mushroom extends Consumable {
     }
 
     @Override
-    protected void moreUpdates(GameScreen parent, float delta) {
+    public void update(GameScreen parent, float delta) {
         if (main.state.movingMushroomModifier) {
             if (parent.time - lastUpdate > 0.7f) {
                 lastUpdate = parent.time;
@@ -25,5 +25,6 @@ public class Mushroom extends Consumable {
             }
             this.pos.add(moveDir.cpy().scl(delta));
         }
+        super.update(parent, delta);
     }
 }

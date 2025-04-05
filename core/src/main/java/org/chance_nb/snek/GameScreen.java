@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameScreen implements Screen {
     // FPSLogger fpslog = new FPSLogger();
+    boolean isPaused = false;
 
     int numTailPieces;
     float speed;
@@ -39,14 +40,14 @@ public class GameScreen implements Screen {
         this.main = main;
         main.mainFontParam.size = 30;
         main.mainFontParam.color = Color.BLACK;
-        this.font = main.mainFontGen.generateFont(main.mainFontParam);
-        this.font.setUseIntegerPositions(false);
-        this.font.getData().setScale(0.02f);
-        this.points = 0;
+        font = main.mainFontGen.generateFont(main.mainFontParam);
+        font.setUseIntegerPositions(false);
+        font.getData().setScale(0.02f);
+        points = 0;
         Vector2 centre = new Vector2(main.worldWidth / 2, main.worldHeight / 2);
-        this.head = new HeadPiece(main, centre.x, centre.y);
-        this.apples = new Array<>();
-        this.mushrooms = new Array<>();
+        head = new HeadPiece(main, centre.x, centre.y);
+        apples = new Array<>();
+        mushrooms = new Array<>();
 
         // Level: normal
         if (!main.state.hardMode) {
@@ -106,6 +107,9 @@ public class GameScreen implements Screen {
     }
 
     private void update(float delta) {
+        if (isPaused) {
+            delta = 0;
+        }
         head.update(this, delta);
         // update tail pieces (recursively)
         lastPiece.updateRecursive(this, delta);
@@ -163,17 +167,16 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
     }
 
     @Override
     public void pause() {
-
+        isPaused = true;
     }
 
     @Override
     public void resume() {
-
+        isPaused = false;
     }
 
     @Override

@@ -14,7 +14,7 @@ public class MenuScreen implements Screen {
     static float blinkinterval = 0.6f;
 
     float time = 0f;
-    float timecounter = 0;
+    float blinktimer = 0;
 
     boolean gameStart = true;
     int points;
@@ -26,21 +26,21 @@ public class MenuScreen implements Screen {
 
     public MenuScreen(Main main) {
         this.main = main;
-        this.toggleui = new TogglesUI(main);
+        toggleui = new TogglesUI(main);
         main.mainFontParam.size = 55;
         main.mainFontParam.color = Color.PURPLE;
-        this.instructFont = main.mainFontGen.generateFont(main.mainFontParam);
+        instructFont = main.mainFontGen.generateFont(main.mainFontParam);
         main.mainFontParam.size = 100;
-        this.titleFont = main.mainFontGen.generateFont(main.mainFontParam);
-        this.instructFont.setUseIntegerPositions(false);
-        this.instructFont.getData().setScale(0.02f);
-        this.titleFont.setUseIntegerPositions(false);
-        this.titleFont.getData().setScale(0.02f);
+        titleFont = main.mainFontGen.generateFont(main.mainFontParam);
+        instructFont.setUseIntegerPositions(false);
+        instructFont.getData().setScale(0.02f);
+        titleFont.setUseIntegerPositions(false);
+        titleFont.getData().setScale(0.02f);
     }
 
     public MenuScreen(Main main, int points, float runTime) {
         this(main);
-        this.gameStart = false;
+        gameStart = false;
         this.points = points;
         this.runTime = Math.round(runTime);
     }
@@ -52,7 +52,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        time += 2 * delta;
+        time += delta;
 
         if (Gdx.input.isKeyPressed(Keys.SPACE)) {
             if (inputReleased) {
@@ -96,18 +96,18 @@ public class MenuScreen implements Screen {
                     main.starShader, main.spriteBatch);
         }
 
-        if (timecounter < blinkinterval) {
+        if (blinktimer < blinkinterval) {
             Util.drawWithTexShader(
                     () -> instructFont.draw(main.spriteBatch, "Press SPACE", main.viewport.getWorldWidth() / 2 - 2.5f,
                             main.viewport.getWorldHeight() / 2 - 1.5f, 5f, 1, false),
                     main.starShader, main.spriteBatch);
-        } else if (timecounter > blinkinterval * 2) {
-            timecounter = 0;
+        } else if (blinktimer > blinkinterval * 2) {
+            blinktimer = 0;
         }
 
         toggleui.update();
 
-        timecounter += delta;
+        blinktimer += delta;
 
         main.spriteBatch.end();
     }

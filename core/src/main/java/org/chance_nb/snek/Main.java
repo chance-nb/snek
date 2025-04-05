@@ -47,8 +47,9 @@ public class Main extends com.badlogic.gdx.Game {
         mainFontGen = new FreeTypeFontGenerator(Gdx.files.internal("ZenDots-Regular.ttf"));
         mainFontParam = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(Gdx.files.internal("assets.txt").read()))) {
+        try (
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(Gdx.files.internal("assets.txt").read()))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.endsWith(".png")) {
@@ -58,7 +59,6 @@ public class Main extends com.badlogic.gdx.Game {
                 } else if (line.endsWith(".wav")) {
                     manager.load(line, Sound.class);
                 }
-
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -8,9 +8,9 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Util {
     public static float wrapClamp(float num, float min, float max) {
-        float span = max - min;
         if (num > max || num < min) {
-            num -= (float) (Math.floor(num / span) * span) + 0.5f;
+            float span = max - min;
+            num -= (float) (Math.floor(num / span) * span);
         }
         return num;
     }
@@ -20,7 +20,7 @@ public class Util {
     }
 
     public static Vector2 wrapClampVec2World(Main main, Vector2 vec2) {
-        return wrapClampVec2(vec2, 0f, main.worldWidth + 0.6f, 0f, main.worldHeight + 0.6f);
+        return wrapClampVec2(vec2, 0f, main.worldWidth + 0.2f, 0f, main.worldHeight+ 0.2f);
     }
 
     public static float getAngle(Vector2 pos1, Vector2 pos2) {

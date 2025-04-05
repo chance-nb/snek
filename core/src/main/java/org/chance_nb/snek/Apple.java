@@ -9,11 +9,11 @@ public class Apple extends Consumable {
     private Vector2 moveDir = new Vector2();
 
     public Apple(Main main, float posx, float posy) {
-        super(main, main.manager.get("apple.png"), posx, posy, 1f, 1f, 0.65f, 0.5f, 0.5f);
+        super(main, main.manager.get("apple.png"), posx, posy, 1f, 1f, 0.6f, 0.5f, 0.5f);
     }
 
     @Override
-    public void moreUpdates(GameScreen parent, float delta) {
+    public void update(GameScreen parent, float delta) {
         if (main.state.movingAppleModifier) { // when apples should move
             if (parent.time - lastUpdate > nextMoveDirChange) { // if we haven't changed direction in a bit
                 lastUpdate = parent.time; // reset timer
@@ -23,6 +23,7 @@ public class Apple extends Consumable {
             }
             this.pos.add(moveDir.cpy().scl(delta));
         }
+        super.update(parent, delta);
     }
 
     @Override
