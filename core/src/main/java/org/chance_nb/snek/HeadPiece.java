@@ -17,31 +17,32 @@ public class HeadPiece extends GameObject {
 
     @Override
     public void update(GameScreen parent, float delta) {
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && Gdx.input.isKeyPressed(Input.Keys.UP) && main.state.diagonals) {
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && Gdx.input.isKeyPressed(Input.Keys.UP)
+                && main.state.diagonals && direction != Direction.DL) {
             this.direction = Direction.UR;
             this.setRotation(-45);
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && Gdx.input.isKeyPressed(Input.Keys.DOWN)
-                && main.state.diagonals) {
+                && main.state.diagonals && direction != Direction.UL) {
             this.direction = Direction.DR;
             this.setRotation(-135);
         } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && Gdx.input.isKeyPressed(Input.Keys.UP)
-                && main.state.diagonals) {
+                && main.state.diagonals && direction != Direction.DR) {
             this.direction = Direction.UL;
             this.setRotation(45);
         } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && Gdx.input.isKeyPressed(Input.Keys.DOWN)
-                && main.state.diagonals) {
+                && main.state.diagonals && direction != Direction.UR) {
             this.direction = Direction.DL;
             this.setRotation(135);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && direction != Direction.L) {
             this.direction = Direction.R;
             this.setRotation(-90);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && direction != Direction.R) {
             this.direction = Direction.L;
             this.setRotation(90);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.UP) && direction != Direction.D) {
             this.direction = Direction.U;
             this.setRotation(0);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && direction != Direction.U) {
             this.direction = Direction.D;
             this.setRotation(180);
         }
