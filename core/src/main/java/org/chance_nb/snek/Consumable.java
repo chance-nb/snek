@@ -7,9 +7,9 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class Consumable extends GameObject {
     private float collisionRadius;
 
-    public Consumable(Main main, Texture texture, float posx, float posy, float sizex, float sizey,
+    public Consumable(Main main, Texture texture, Vector2 pos, float sizex, float sizey,
             float collisionRadius, float originx, float originy) {
-        super(main, texture, posx, posy, sizex, sizey, originx, originy);
+        super(main, texture, pos.x, pos.y, sizex, sizey, originx, originy);
         this.collisionRadius = collisionRadius;
     }
 

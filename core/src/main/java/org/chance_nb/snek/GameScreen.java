@@ -1,5 +1,7 @@
 package org.chance_nb.snek;
 
+import java.lang.reflect.Constructor;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -83,15 +85,24 @@ public class GameScreen implements Screen {
         }
 
         // initialize apples
+        Vector2 newPos = new Vector2();
         for (int i = 0; i < numApples; i++) {
-            // apples get put at random positions
-            apples.add(new Apple(main, MathUtils.random(main.worldWidth), MathUtils.random(main.worldHeight)));
+            newPos.set(MathUtils.random(main.worldWidth), MathUtils.random(main.worldHeight));
+            if (newPos.dst(centre) <= 1.5) {
+                i--;
+                continue;
+            }
+            apples.add(new Apple(main, newPos));
         }
 
         if (main.state.mushrooms) { // if we have mushrooms enabled, init those
             for (int i = 0; i < numMushrooms; i++) {
-                mushrooms
-                        .add(new Mushroom(main, MathUtils.random(main.worldWidth), MathUtils.random(main.worldHeight)));
+            newPos.set(MathUtils.random(main.worldWidth), MathUtils.random(main.worldHeight));
+            if (newPos.dst(centre) <= 1) {
+                i--;
+                continue;
+            }
+            mushrooms.add(new Mushroom(main, newPos));
             }
         }
     }

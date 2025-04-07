@@ -6,8 +6,8 @@ public class Mushroom extends Consumable {
     private float lastUpdate = 0f;
     private Vector2 moveDir = new Vector2();
 
-    public Mushroom(Main main, float posx, float posy) {
-        super(main, main.manager.get("mushroom.png"), posx, posy, 1f, 1f, 0.5f, 0.5f, 0.5f);
+    public Mushroom(Main main, Vector2 pos) {
+        super(main, main.manager.get("mushroom.png"), pos, 1f, 1f, 0.5f, 0.5f, 0.5f);
     }
 
     @Override

@@ -8,8 +8,8 @@ public class Apple extends Consumable {
     private float nextMoveDirChange = 0.7f;
     private Vector2 moveDir = new Vector2();
 
-    public Apple(Main main, float posx, float posy) {
-        super(main, main.manager.get("apple.png"), posx, posy, 1f, 1f, 0.6f, 0.5f, 0.5f);
+    public Apple(Main main, Vector2 pos) {
+        super(main, main.manager.get("apple.png"), pos, 1f, 1f, 0.6f, 0.5f, 0.5f);
     }
 
     @Override
