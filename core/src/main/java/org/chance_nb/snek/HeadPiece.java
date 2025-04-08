@@ -17,6 +17,10 @@ public class HeadPiece extends GameObject {
 
     @Override
     public void update(GameScreen parent, float delta) {
+        // go through all the input directions, check whether:
+        // - the keys are pressed
+        // - diagonals are enabled (for diagonals)
+        // - we're not moving in the opposite direction
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && Gdx.input.isKeyPressed(Input.Keys.UP)
                 && main.state.diagonals && direction != Direction.DL) {
             this.direction = Direction.UR;
@@ -47,6 +51,7 @@ public class HeadPiece extends GameObject {
             this.setRotation(180);
         }
 
+        // move based on our direction
         switch (this.direction) {
             case Direction.UR:
                 this.pos.add(parent.speed * delta * MathUtils.cosDeg(45), parent.speed * delta * MathUtils.sinDeg(45));
@@ -79,6 +84,7 @@ public class HeadPiece extends GameObject {
                 break;
         }
 
+        // mouse movement, to be deprecated, probably
         if (Gdx.input.isTouched()) {
             Vector2 target = new Vector2(Gdx.input.getX(), Gdx.input.getY());
             main.viewport.unproject(target);

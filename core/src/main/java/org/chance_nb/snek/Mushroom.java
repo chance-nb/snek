@@ -11,16 +11,17 @@ public class Mushroom extends Consumable {
     }
 
     @Override
-    protected void onCollision(GameScreen parent, float delta) {
+    protected void onHeadCollision(GameScreen parent, float delta) {
         main.death.play();
         main.setScreen(new MenuScreen(main, parent.points, parent.time - 5f));
     }
 
     @Override
     public void update(GameScreen parent, float delta) {
-        if (main.state.movingMushroomModifier) {
-            if (parent.time - lastUpdate > 0.7f) {
+        if (main.state.movingMushroomModifier) { // if mushrooms should move
+            if (parent.time - lastUpdate > 0.7f) { // if it's been 0.7s since we changed direction
                 lastUpdate = parent.time;
+                // randomly change direction
                 moveDir.set((float) Math.random() * 4f - 2f, (float) Math.random() * 4f - 2f).nor();
             }
             this.pos.add(moveDir.cpy().scl(delta));

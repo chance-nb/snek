@@ -27,16 +27,23 @@ public class TailPiece extends GameObject {
     public void update(GameScreen parent, float delta) {
         // move
         Vector2 target;
+        // set target to head or next piece
         if (prevPiece != null) {
             target = prevPiece.pos;
         } else {
             target = parent.head.pos;
         }
+        // get distance between us and target
         float distance = this.pos.dst(target);
+
+        // the factor should be 0 <= α <= 0.6
+        // d * (d- d_m) is to ensure the minimun distance
+        // and to scale the factor based on the distance
         float interpolationFactor = Math.clamp(distance * (distance - minDistance), 0f, 0.6f);
+        // interpolate (why multiply by 150? idk it works)
         this.pos = this.pos.interpolate(target, interpolationFactor * delta * 150, Interpolation.pow2Out);
 
-        // collide
+        // collide with head
         if (headCollision) {
             if (Util.checkCollision(main, this.pos, parent.head.pos, 0.35f)) {
                 main.death.play();
@@ -45,6 +52,9 @@ public class TailPiece extends GameObject {
         }
     }
 
+    /**
+     * recursively update this piece and all pieces before it
+     */
     public void updateRecursive(GameScreen parent, float delta) {
         this.update(parent, delta);
         if (prevPiece != null) {
@@ -53,6 +63,7 @@ public class TailPiece extends GameObject {
     }
 
     @Override
+    // override to recursively draw every piece
     public void wrapDraw(Batch batch) {
         super.wrapDraw(batch);
         if (prevPiece != null) {

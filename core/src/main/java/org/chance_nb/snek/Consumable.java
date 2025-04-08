@@ -16,29 +16,37 @@ public abstract class Consumable extends GameObject {
     @Override
     public void update(GameScreen parent, float delta) {
         if (Util.checkCollision(main, this.pos, parent.head.pos, this.collisionRadius)) {
-            onCollision(parent, delta);
+            onHeadCollision(parent, delta);
         }
 
+        // get pushed by tail pieces
         TailPiece closestTailPiece = findClosestCollidingTailPiece(parent.lastPiece, null, 100f);
         if (closestTailPiece != null) {
+            // get pos of the closest piece
             Vector2 target = Util.wrapClampVec2World(main, closestTailPiece.pos);
+            // wrap our pos back on the normal screen
             Vector2 wrappos = Util.wrapClampVec2World(main, this.pos);
-            this.pos = wrappos.interpolate(target, (-0.6f - wrappos.dst(target)) / 30, Interpolation.linear);
+            // get pushed (why divide by 30? because it works)
+            this.pos = wrappos.interpolate(target, (-collisionRadius - wrappos.dst(target)) / 30, Interpolation.linear);
         }
     }
 
-    protected abstract void onCollision(GameScreen parent, float delta);
+    protected abstract void onHeadCollision(GameScreen parent, float delta);
 
     private TailPiece findClosestCollidingTailPiece(TailPiece currTailPiece, TailPiece closest, Float closestDist) {
+        // if we're colliding with the current piece
         if (Util.checkCollision(main, currTailPiece.pos, this.pos, collisionRadius)) {
+            // if the current piece is closer than any other one we've encountered
             if (this.pos.dst(currTailPiece.pos) < closestDist) {
                 closest = currTailPiece;
                 closestDist = this.pos.dst(currTailPiece.pos);
             }
         }
+        // we've gone through all of them, return
         if (currTailPiece.prevPiece == null) {
             return closest;
         }
+        // still more, continue recursively going through them
         return findClosestCollidingTailPiece(currTailPiece.prevPiece, closest, closestDist);
     }
 }

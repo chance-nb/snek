@@ -9,6 +9,7 @@ public class TogglesUI {
     // ToggleButton diagonalsButton;
 
     public TogglesUI(Main main) {
+        // create all the buttons
         this.main = main;
         this.movingAppleButton = new ToggleButton(main, 1f, 1f, 1f, 1f, main.manager.get("movingAppleButtonOn.png"),
                 main.manager.get("movingAppleButtonOff.png"), main.state.movingAppleModifier);
@@ -17,6 +18,7 @@ public class TogglesUI {
         this.movingMushroomButton = new ToggleButton(main, 3f, 1f, 1f, 1f,
                 main.manager.get("movingMushroomButtonOn.png"), main.manager.get("movingMushroomButtonOff.png"),
                 main.state.movingMushroomModifier);
+
         // this.diagonalsButton = new ToggleButton(main, 2f, 1f, 1f, 1f,
         // main.manager.get("diagonalsButtonOn.png"),
         // main.manager.get("diagonalsButtonOff.png"),
@@ -28,6 +30,8 @@ public class TogglesUI {
     }
 
     public void update() {
+        // update (=check) all the buttons and set the global state toggles to their
+        // values
         movingAppleButton.draw(main.spriteBatch);
         movingAppleButton.update();
         main.state.movingAppleModifier = movingAppleButton.value;

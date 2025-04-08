@@ -47,6 +47,7 @@ public class Main extends com.badlogic.gdx.Game {
         mainFontGen = new FreeTypeFontGenerator(Gdx.files.internal("ZenDots-Regular.ttf"));
         mainFontParam = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
+        // autoload all the .png, .mp3 and .wav assets
         try (
                 BufferedReader reader = new BufferedReader(
                         new InputStreamReader(Gdx.files.internal("assets.txt").read()))) {
@@ -70,6 +71,7 @@ public class Main extends com.badlogic.gdx.Game {
         this.collect = manager.get("collect.wav");
         this.death = manager.get("death.wav");
 
+        // compile and load shaders
         ShaderProgram.pedantic = false;
         backgroundShader = new ShaderProgram(Gdx.files.internal("shaders/passthrough.vert"),
                 Gdx.files.internal("shaders/background.frag"));
@@ -89,6 +91,7 @@ public class Main extends com.badlogic.gdx.Game {
             throw new IllegalArgumentException("Error compiling shader: " + starShader.getLog());
         }
 
+        // go to menuscreen
         currentScreen = new MenuScreen(this);
         this.setScreen(currentScreen);
     }

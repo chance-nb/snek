@@ -9,6 +9,11 @@ public abstract class GameObject extends Sprite {
     Main main;
     Vector2 pos = new Vector2();
 
+    /**
+     * @param texture The Texture to use
+     * @param originx The point in the Texture at which is the center (x)
+     * @param originy The point in the Texture at which is the center (y)
+     */
     public GameObject(Main main, Texture texture, float posx, float posy, float sizex, float sizey, float originx,
             float originy) {
         super(texture);

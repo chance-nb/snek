@@ -1,7 +1,5 @@
 package org.chance_nb.snek;
 
-import java.lang.reflect.Constructor;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -40,13 +38,17 @@ public class GameScreen implements Screen {
 
     public GameScreen(Main main) {
         this.main = main;
+
+        // generate font
         main.mainFontParam.size = 30;
         main.mainFontParam.color = Color.BLACK;
         font = main.mainFontGen.generateFont(main.mainFontParam);
         font.setUseIntegerPositions(false);
         font.getData().setScale(0.02f);
+
         points = 0;
         Vector2 centre = new Vector2(main.worldWidth / 2, main.worldHeight / 2);
+
         head = new HeadPiece(main, centre.x, centre.y);
         apples = new Array<>();
         mushrooms = new Array<>();
@@ -67,15 +69,14 @@ public class GameScreen implements Screen {
             numApples = 5;
             numMushrooms = 6;
             main.state.diagonals = false;
-            colorshift = new Vector3(0.3f, -0.4f, -0.2f);
+            colorshift = new Vector3(0.3f, -0.4f, -0.2f); // reddish shift
         }
 
         // initialize tail pieces
         Vector2 subVec = new Vector2(0f, minDistance); // vector to init distance TailPieces by
         lastPiece = new TailPiece(main, head.pos.cpy().sub(subVec), null, true); // make the first one because it has
                                                                                  // special case of null
-        // first make three pieces the head can't collide with for safety (loop runs
-        // twice because we already have one)
+        // first make three pieces the head can't collide with for safety
         // always take last pieces pos, copy it and subtract init distance
         for (int i = 0; i < 2; i++) {
             lastPiece = new TailPiece(main, lastPiece.pos.cpy().sub(subVec), lastPiece, true);
@@ -88,7 +89,7 @@ public class GameScreen implements Screen {
         Vector2 newPos = new Vector2();
         for (int i = 0; i < numApples; i++) {
             newPos.set(MathUtils.random(main.worldWidth), MathUtils.random(main.worldHeight));
-            if (newPos.dst(centre) <= 1.5) {
+            if (newPos.dst(centre) <= 1) { // make sure it's not near the head
                 i--;
                 continue;
             }
@@ -97,12 +98,12 @@ public class GameScreen implements Screen {
 
         if (main.state.mushrooms) { // if we have mushrooms enabled, init those
             for (int i = 0; i < numMushrooms; i++) {
-            newPos.set(MathUtils.random(main.worldWidth), MathUtils.random(main.worldHeight));
-            if (newPos.dst(centre) <= 1) {
-                i--;
-                continue;
-            }
-            mushrooms.add(new Mushroom(main, newPos));
+                newPos.set(MathUtils.random(main.worldWidth), MathUtils.random(main.worldHeight));
+                if (newPos.dst(centre) <= 1.5) {
+                    i--;
+                    continue;
+                }
+                mushrooms.add(new Mushroom(main, newPos));
             }
         }
     }
@@ -121,35 +122,42 @@ public class GameScreen implements Screen {
         if (isPaused) {
             delta = 0;
         }
+        // update head
         head.update(this, delta);
         // update tail pieces (recursively)
         lastPiece.updateRecursive(this, delta);
-        // apples
+        // update apples
         for (Apple apple : apples) {
             apple.update(this, delta);
         }
+        // update mushrooms
         for (Mushroom mushroom : mushrooms) {
             mushroom.update(this, delta);
         }
     }
 
     private void draw() {
-        ScreenUtils.clear(Color.BLACK);
+        ScreenUtils.clear(Color.BLACK); // clear screen
         main.viewport.apply();
         main.spriteBatch.setProjectionMatrix(main.viewport.getCamera().combined);
 
         main.spriteBatch.begin();
+        // opengl stuff to allow shaders on textures w/ transparency
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glEnable(GL20.GL_BLEND);
 
+        // # Background
         main.backgroundShader.bind();
+        // set shader params
         main.backgroundShader.setUniformf("u_time", time);
         main.backgroundShader.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         main.backgroundShader.setUniformf("u_colorshift", colorshift);
         main.spriteBatch.setShader(main.backgroundShader);
+        // draw white pixel texture across the entire screen w/ backgroundShader
         main.spriteBatch.draw(main.white_pixel, 0, 0, main.worldWidth, main.worldHeight);
         main.spriteBatch.setShader(null);
 
+        // # Player
         main.starShader.bind();
         main.starShader.setUniformf("u_time", time);
         main.starShader.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -157,6 +165,7 @@ public class GameScreen implements Screen {
         Util.drawWithTexShader(() -> head.wrapDraw(main.spriteBatch), main.starShader, main.spriteBatch);
         Util.drawWithTexShader(() -> lastPiece.wrapDraw(main.spriteBatch), main.starShader, main.spriteBatch);
 
+        // # Apples
         main.rainbowShader.bind();
         main.rainbowShader.setUniformf("u_time", time);
         main.rainbowShader.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -164,13 +173,17 @@ public class GameScreen implements Screen {
             Util.drawWithTexShader(() -> apple.wrapDraw(main.spriteBatch), main.rainbowShader, main.spriteBatch);
         }
 
-        main.rainbowShader.bind();
-        main.rainbowShader.setUniformf("u_time", time);
-        main.rainbowShader.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        for (Mushroom mushroom : mushrooms) {
-            Util.drawWithTexShader(() -> mushroom.wrapDraw(main.spriteBatch), main.rainbowShader, main.spriteBatch);
+        // # Mushrooms
+        if (main.state.mushrooms) {
+            main.rainbowShader.bind();
+            main.rainbowShader.setUniformf("u_time", time);
+            main.rainbowShader.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            for (Mushroom mushroom : mushrooms) {
+                Util.drawWithTexShader(() -> mushroom.wrapDraw(main.spriteBatch), main.rainbowShader, main.spriteBatch);
+            }
         }
 
+        // # Point Counter
         font.draw(main.spriteBatch, "Points: " + points, 2, 2);
 
         main.spriteBatch.end();

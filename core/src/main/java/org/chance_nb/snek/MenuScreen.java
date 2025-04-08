@@ -27,6 +27,8 @@ public class MenuScreen implements Screen {
     public MenuScreen(Main main) {
         this.main = main;
         toggleui = new TogglesUI(main);
+
+        // make fonts
         main.mainFontParam.size = 55;
         main.mainFontParam.color = Color.PURPLE;
         instructFont = main.mainFontGen.generateFont(main.mainFontParam);
@@ -38,6 +40,7 @@ public class MenuScreen implements Screen {
         titleFont.getData().setScale(0.02f);
     }
 
+    // if we're coming from GameScreen
     public MenuScreen(Main main, int points, float runTime) {
         this(main);
         gameStart = false;
@@ -54,30 +57,34 @@ public class MenuScreen implements Screen {
     public void render(float delta) {
         time += delta;
 
-        if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-            if (inputReleased) {
-                main.setScreen(new GameScreen(main));
+        if (Gdx.input.isKeyPressed(Keys.SPACE)) { // if space pressed
+            if (inputReleased) { // and we had a frame where it was released
+                main.setScreen(new GameScreen(main)); // go to GameScreen
             }
         } else if (!inputReleased) {
             inputReleased = true;
         }
 
-        ScreenUtils.clear(Color.BLACK);
+        ScreenUtils.clear(Color.BLACK); // clear screen
+
         main.viewport.apply();
         main.spriteBatch.setProjectionMatrix(main.viewport.getCamera().combined);
         main.spriteBatch.begin();
 
         main.starShader.bind();
+        // shader params
         main.starShader.setUniformf("u_time", time);
         main.starShader.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         main.starShader.setUniformf("u_density", 1.0f);
 
         if (gameStart) {
+            // if we're in Game Start, just draw title
             Util.drawWithTexShader(
                     () -> titleFont.draw(main.spriteBatch, "SNEK", main.viewport.getWorldWidth() / 2 - 2.5f,
                             main.viewport.getWorldHeight() / 2 + 1.5f, 5f, 1, false),
                     main.starShader, main.spriteBatch);
         } else {
+            // if we're in Game Over, draw Game Over Title, points & time
             Util.drawWithTexShader(
                     () -> instructFont.draw(main.spriteBatch, "Game Over!", main.viewport.getWorldWidth() / 2 - 2.5f,
                             main.viewport.getWorldHeight() / 2 + 1.5f, 5f, 1, false),
@@ -96,6 +103,7 @@ public class MenuScreen implements Screen {
                     main.starShader, main.spriteBatch);
         }
 
+        // blinking Press SPACE
         if (blinktimer < blinkinterval) {
             Util.drawWithTexShader(
                     () -> instructFont.draw(main.spriteBatch, "Press SPACE", main.viewport.getWorldWidth() / 2 - 2.5f,
@@ -105,6 +113,7 @@ public class MenuScreen implements Screen {
             blinktimer = 0;
         }
 
+        // update buttons
         toggleui.update();
 
         blinktimer += delta;

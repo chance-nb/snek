@@ -18,18 +18,21 @@ public class Apple extends Consumable {
             if (parent.time - lastUpdate > nextMoveDirChange) { // if we haven't changed direction in a bit
                 lastUpdate = parent.time; // reset timer
                 nextMoveDirChange = (float) Math.random() + 0.3f;
-                moveDir.set((float) Math.random() * 4f - 2f, (float) Math.random() * 4f - 2f); // set new random move
-                                                                                               // direction
+                // set new random direction
+                moveDir.set((float) Math.random() * 4f - 2f, (float) Math.random() * 4f - 2f);
             }
             this.pos.add(moveDir.cpy().scl(delta));
         }
-        super.update(parent, delta);
+        super.update(parent, delta); // pass on to Consumable class update func
     }
 
     @Override
-    protected void onCollision(GameScreen parent, float delta) {
+    protected void onHeadCollision(GameScreen parent, float delta) {
+        // rerandomize position
         this.setPos(MathUtils.random(main.worldWidth), MathUtils.random(main.worldHeight));
+        // add a new TailPiece
         parent.lastPiece = new TailPiece(main, parent.lastPiece.pos.cpy(), parent.lastPiece);
+        // play pickup sound
         main.collect.play();
         parent.points += 1;
     }

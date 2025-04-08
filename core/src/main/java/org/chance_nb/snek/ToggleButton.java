@@ -7,6 +7,11 @@ public class ToggleButton extends Button {
     Texture offTexture;
     boolean value;
 
+    /**
+     * @param onTexture The Texture for the Button being on
+     * @param offTexture The Teture for the Button being off
+     * @param value The initial value
+     */
     public ToggleButton(Main main, float posx, float posy, float sizex, float sizey, Texture onTexture,
             Texture offTexture, boolean value) {
         super(main, posx, posy, sizex, sizey);
