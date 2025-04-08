@@ -1,11 +1,14 @@
 package org.chance_nb.snek;
 
+import org.chance_nb.snek.spaceinvaders.SpaceInvadersGameScreen;
+
 public class TogglesUI {
     Main main;
     ToggleButton movingAppleButton;
     ToggleButton mushroomButton;
     ToggleButton movingMushroomButton;
     ToggleButton difficultyButton;
+    org.chance_nb.snek.Button spaceInvadersButton;
     // ToggleButton diagonalsButton;
 
     public TogglesUI(Main main) {
@@ -27,6 +30,9 @@ public class TogglesUI {
         this.difficultyButton = new ToggleButton(main, main.worldWidth / 2, 1f, 2f, 1f,
                 main.manager.get("hardButton.png"),
                 main.manager.get("easyButton.png"), main.state.hardMode);
+
+        spaceInvadersButton = new Button(main, 14f, 9f, 1f, 1f);
+
     }
 
     public void update() {
@@ -48,5 +54,10 @@ public class TogglesUI {
         difficultyButton.draw(main.spriteBatch);
         difficultyButton.update();
         main.state.hardMode = difficultyButton.value;
+
+        spaceInvadersButton.draw(main.spriteBatch);
+        if (spaceInvadersButton.isPressed()) {
+            main.setScreen(new SpaceInvadersGameScreen(main));
+        }
     }
 }
